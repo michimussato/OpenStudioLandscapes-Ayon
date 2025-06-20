@@ -1,0 +1,412 @@
+import copy
+
+import json
+import os
+import pathlib
+from collections import ChainMap
+from functools import reduce
+from typing import Generator, MutableMapping, List
+
+import git
+from git.exc import GitCommandError
+import yaml
+from dagster import (
+    AssetExecutionContext,
+    AssetIn,
+    AssetKey,
+    AssetMaterialization,
+    MetadataValue,
+    Output,
+    asset,
+)
+
+from OpenStudioLandscapes.engine.constants import *
+from OpenStudioLandscapes.engine.enums import *
+from OpenStudioLandscapes.engine.utils import *
+
+from OpenStudioLandscapes.Ayon.constants import *
+
+from docker_compose_graph.utils import *
+from docker_compose_graph.yaml_tags.overrides import *
+
+from OpenStudioLandscapes.engine.common_assets.constants import get_constants
+from OpenStudioLandscapes.engine.common_assets.docker_config import get_docker_config
+from OpenStudioLandscapes.engine.common_assets.env import get_env
+from OpenStudioLandscapes.engine.common_assets.group_in import get_group_in
+from OpenStudioLandscapes.engine.common_assets.group_out import get_group_out
+from OpenStudioLandscapes.engine.common_assets.docker_compose_graph import (
+    get_docker_compose_graph,
+)
+from OpenStudioLandscapes.engine.common_assets.feature_out import get_feature_out
+from OpenStudioLandscapes.engine.common_assets.docker_config_json import (
+    get_docker_config_json,
+)
+
+
+constants = get_constants(
+    ASSET_HEADER=ASSET_HEADER,
+)
+
+
+docker_config = get_docker_config(
+    ASSET_HEADER=ASSET_HEADER,
+)
+
+
+group_in = get_group_in(
+    ASSET_HEADER=ASSET_HEADER,
+    ASSET_HEADER_PARENT=ASSET_HEADER_BASE,
+    input_name=str(GroupIn.BASE_IN),
+)
+
+
+env = get_env(
+    ASSET_HEADER=ASSET_HEADER,
+)
+
+
+group_out = get_group_out(
+    ASSET_HEADER=ASSET_HEADER,
+)
+
+
+docker_compose_graph = get_docker_compose_graph(
+    ASSET_HEADER=ASSET_HEADER,
+)
+
+
+feature_out = get_feature_out(
+    ASSET_HEADER=ASSET_HEADER,
+    feature_out_ins={
+        "env": dict,
+        "compose": dict,
+        "group_in": dict,
+    },
+)
+
+
+docker_config_json = get_docker_config_json(
+    ASSET_HEADER=ASSET_HEADER,
+)
+
+
+@asset(
+    **ASSET_HEADER,
+)
+def repository_ayon(
+    context: AssetExecutionContext,
+) -> Generator[Output[dict[str, str | None]] | AssetMaterialization, None, None]:
+    repository_dict = {
+        "branch": "main",
+        "repository_dir": "ayon-docker",
+        "repository_url": "https://github.com/ynput/ayon-docker.git",
+        "repository_dir_full": None,
+    }
+
+    yield Output(repository_dict)
+
+    yield AssetMaterialization(
+        asset_key=context.asset_key,
+        metadata={
+            "__".join(context.asset_key.path): MetadataValue.json(repository_dict),
+        },
+    )
+
+
+@asset(
+    **ASSET_HEADER,
+    ins={
+        "env": AssetIn(
+            AssetKey([*ASSET_HEADER["key_prefix"], "env"]),
+        ),
+        "repository_ayon": AssetIn(
+            AssetKey([*ASSET_HEADER["key_prefix"], "repository_ayon"]),
+        ),
+    },
+)
+def clone_repository(
+    context: AssetExecutionContext,
+    env: dict,
+    repository_ayon: dict[str, str | None],
+) -> Generator[Output[dict[str, str]] | AssetMaterialization, None, None]:
+
+    repo_dir = pathlib.Path(
+        env["DOT_LANDSCAPES"],
+        env.get("LANDSCAPE", "default"),
+        f"{ASSET_HEADER['group_name']}__{'__'.join(ASSET_HEADER['key_prefix'])}",
+        "__".join(context.asset_key.path),
+        "repos",
+    )
+
+    repository_dir_full = repo_dir / repository_ayon["repository_dir"]
+    repository_dir_full.parent.mkdir(parents=True, exist_ok=True)
+
+    repository_ayon["repository_dir_full"] = repository_dir_full.as_posix()
+    context.log.info(repository_ayon["repository_dir_full"])
+
+    try:
+        git.Repo.clone_from(
+            url=repository_ayon["repository_url"],
+            to_path=repository_ayon["repository_dir_full"],
+            branch=repository_ayon["branch"],
+        )
+    except GitCommandError as e:
+        context.log.warning("Pulling from Repo (%s)" % e)
+        existing_repo = git.Repo(repository_ayon["repository_dir_full"])
+        origin = existing_repo.remotes.origin
+        origin.pull()
+
+    yield Output(repository_ayon)
+
+    yield AssetMaterialization(
+        asset_key=context.asset_key,
+        metadata={
+            "__".join(context.asset_key.path): MetadataValue.json(repository_ayon),
+        },
+    )
+
+
+@asset(
+    **ASSET_HEADER,
+)
+def compose_networks(
+    context: AssetExecutionContext,
+) -> Generator[
+    Output[MutableMapping[str, MutableMapping[str, MutableMapping[str, str]]]]
+    | AssetMaterialization,
+    None,
+    None,
+]:
+
+    compose_network_mode = ComposeNetworkMode.DEFAULT
+
+    if compose_network_mode == ComposeNetworkMode.DEFAULT:
+        docker_dict = {
+            "networks": {
+                "ayon": {
+                    "name": "network_ayon-10-2",
+                },
+            },
+        }
+
+    else:
+        docker_dict = {
+            "network_mode": compose_network_mode.value,
+        }
+
+    docker_yaml = yaml.dump(docker_dict)
+
+    yield Output(docker_dict)
+
+    yield AssetMaterialization(
+        asset_key=context.asset_key,
+        metadata={
+            "__".join(context.asset_key.path): MetadataValue.json(docker_dict),
+            "compose_network_mode": MetadataValue.text(compose_network_mode.value),
+            "docker_dict": MetadataValue.md(
+                f"```json\n{json.dumps(docker_dict, indent=2)}\n```"
+            ),
+            "docker_yaml": MetadataValue.md(f"```shell\n{docker_yaml}\n```"),
+        },
+    )
+
+
+# Todo:
+#  - [ ] Maybe fix this Non-Standard `compose` implementation
+@asset(
+    **ASSET_HEADER,
+    ins={
+        "env": AssetIn(
+            AssetKey([*ASSET_HEADER["key_prefix"], "env"]),
+        ),
+        "compose_networks": AssetIn(
+            AssetKey([*ASSET_HEADER["key_prefix"], "compose_networks"]),
+        ),
+        "clone_repository": AssetIn(
+            AssetKey([*ASSET_HEADER["key_prefix"], "clone_repository"]),
+        ),
+    },
+)
+def compose(
+    context: AssetExecutionContext,
+    env: dict,  # pylint: disable=redefined-outer-name
+    compose_networks: dict,  # pylint: disable=redefined-outer-name
+    clone_repository: dict,  # pylint: disable=redefined-outer-name
+) -> Generator[
+    Output[MutableMapping[str, List[MutableMapping[str, List[str]]]]]
+    | AssetMaterialization,
+    None,
+    None,
+]:
+    """"""
+
+    network_dict = {}
+    ports_dict = {}
+
+    if "networks" in compose_networks:
+        network_dict = {"networks": list(compose_networks.get("networks", {}).keys())}
+        ports_dict = {
+            "ports": OverrideArray(
+                [
+                    f"{env.get('AYON_PORT_HOST')}:{env.get('AYON_PORT_CONTAINER')}",
+                ]
+            ),
+        }
+    elif "network_mode" in compose_networks:
+        network_dict = {"network_mode": compose_networks.get("network_mode")}
+
+    parent = (
+        pathlib.Path(clone_repository["repository_dir_full"]) / "docker-compose.yml"
+    )
+
+    # Todo:
+    if AYONDB_INSIDE_CONTAINER:
+        raise NotImplementedError("This feature is not yet implemented.")
+
+    ayon_db_dir_host = (
+        pathlib.Path(env.get("AYON_DB_INSTALL_DESTINATION")) / "postgresql"
+    )
+    ayon_db_dir_host.mkdir(parents=True, exist_ok=True)
+    context.log.info(f"Directory {ayon_db_dir_host.as_posix()} created.")
+
+    # Todo:
+    #  - [ ] In docker-compose-graph we get /var/lib/postgresql/data twice for some reason.
+    #        Do we need to implement a volumes override for this?
+    volumes_dict = {
+        "volumes": [
+            "/etc/localtime:/etc/localtime:ro",
+            f"{ayon_db_dir_host.as_posix()}:/var/lib/postgresql/data:rw",
+        ]
+    }
+
+    service_name_postgres = "postgres"
+    container_name_postgres = "--".join(
+        [f"ayon-{service_name_postgres}", env.get("LANDSCAPE", "default")]
+    )
+    host_name_postgres = ".".join([service_name_postgres, env["ROOT_DOMAIN"]])
+
+    service_name_redis = "redis"
+    container_name_redis = "--".join(
+        [f"ayon-{service_name_redis}", env.get("LANDSCAPE", "default")]
+    )
+    host_name_redis = ".".join([service_name_redis, env["ROOT_DOMAIN"]])
+
+    service_name_server = "server"
+    container_name_server = "--".join(
+        [f"ayon-{service_name_server}", env.get("LANDSCAPE", "default")]
+    )
+    host_name_server = ".".join([service_name_server, env["ROOT_DOMAIN"]])
+
+    docker_dict_override = {
+        "services": {
+            service_name_postgres: {
+                "container_name": container_name_postgres,
+                "hostname": host_name_postgres,
+                "domainname": env.get("ROOT_DOMAIN"),
+                **copy.deepcopy(volumes_dict),
+                **copy.deepcopy(network_dict),
+            },
+            service_name_redis: {
+                "container_name": container_name_redis,
+                "hostname": host_name_redis,
+                "domainname": env.get("ROOT_DOMAIN"),
+                **copy.deepcopy(network_dict),
+            },
+            service_name_server: {
+                "container_name": container_name_server,
+                "hostname": host_name_server,
+                "domainname": env.get("ROOT_DOMAIN"),
+                # Todo:
+                #  - [ ] healthcheck failure: https://github.com/ynput/ayon-docker/issues/34
+                #  - [ ] Need to find out whether `ports` Override
+                #  also overrides the exports in the source ayon-docker-compose.yml
+                #  "exports": OverrideArray([]),
+                **copy.deepcopy(network_dict),
+                **copy.deepcopy(ports_dict),
+            },
+        },
+    }
+
+    if "networks" in compose_networks:
+        network_dict = copy.deepcopy(compose_networks)
+    else:
+        network_dict = {}
+
+    docker_chainmap = ChainMap(
+        network_dict,
+        docker_dict_override,
+    )
+
+    docker_dict = reduce(deep_merge, docker_chainmap.maps)
+
+    docker_compose_override = pathlib.Path(
+        env["DOT_LANDSCAPES"],
+        env.get("LANDSCAPE", "default"),
+        f"{ASSET_HEADER['group_name']}__{'__'.join(ASSET_HEADER['key_prefix'])}",
+        "__".join(context.asset_key.path),
+        "docker-compose.override.yml",
+    )
+
+    docker_compose_override.parent.mkdir(parents=True, exist_ok=True)
+
+    docker_yaml_override: str = yaml.dump(docker_dict)
+
+    with open(docker_compose_override, "w") as fw:
+        fw.write(docker_yaml_override)
+
+    # Write compose override to disk here to be able to reference
+    # it in the following step.
+    # It seems that it's necessary to apply overrides in
+    # include: path
+
+    # Convert absolute paths in `include` to
+    # relative ones
+    DOCKER_COMPOSE = pathlib.Path(env["DOCKER_COMPOSE"])
+    DOCKER_COMPOSE.parent.mkdir(parents=True, exist_ok=True)
+
+    rel_paths = []
+    dot_landscapes = pathlib.Path(env["DOT_LANDSCAPES"])
+
+    # Todo:
+    #  - [ ] find a better way to implement relpath with `from` and `via`
+    #  - [ ] externalize
+    for path in [
+        parent.as_posix(),
+        docker_compose_override.as_posix(),
+    ]:
+        rel_path = get_relative_path_via_common_root(
+            context=context,
+            path_src=DOCKER_COMPOSE,
+            path_dst=pathlib.Path(path),
+            path_common_root=dot_landscapes,
+        )
+
+        rel_paths.append(rel_path.as_posix())
+
+    docker_dict_include = {
+        "include": [
+            {
+                "path": rel_paths,
+            },
+        ],
+    }
+
+    docker_yaml_include = yaml.dump(docker_dict_include)
+
+    # Write docker-compose.yaml
+    with open(DOCKER_COMPOSE, mode="w", encoding="utf-8") as fw:
+        fw.write(docker_yaml_include)
+
+    yield Output(docker_dict_include)
+
+    yield AssetMaterialization(
+        asset_key=context.asset_key,
+        metadata={
+            "__".join(context.asset_key.path): MetadataValue.json(docker_dict_include),
+            "docker_yaml_override": MetadataValue.md(
+                f"```yaml\n{docker_yaml_override}\n```"
+            ),
+            "path_docker_yaml_override": MetadataValue.path(docker_compose_override),
+            # Todo: "cmd_docker_run": MetadataValue.path(cmd_list_to_str(cmd_docker_run)),
+        },
+    )
