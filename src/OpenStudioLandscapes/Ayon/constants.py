@@ -73,29 +73,6 @@ FEATURE_CONFIGS = {
         .expanduser()
         .as_posix(),
     },
-    # OpenStudioLandscapesConfig.PRODUCTION: {
-    #     "DOCKER_USE_CACHE": DOCKER_USE_CACHE,
-    #     "CONFIGS_ROOT": pathlib.Path(
-    #         get_configs_root(pathlib.Path(__file__)),
-    #     )
-    #     .expanduser()
-    #     .as_posix(),
-    #     "AYON_PORT_HOST": "5010",
-    #     "AYON_PORT_CONTAINER": "5000",
-    #     # "AYON_USERNAME": None,
-    #     # "AYON_PASSWORD": None,
-    #     # db
-    #     # on /nfs:
-    #     "AYON_DB_INSTALL_DESTINATION": pathlib.Path(
-    #         f"{env.get('NFS_ENTRY_POINT')}",
-    #         "/databases/ayon/postgresql/data",
-    #         # f"{GROUP}__{'__'.join(KEY)}",
-    #         # "data",
-    #         # "ayon-db",
-    #     )
-    #     .expanduser()
-    #     .as_posix(),
-    # },
     # OpenStudioLandscapesConfig.DEVELOPMENT: {
     #     "DOCKER_USE_CACHE": DOCKER_USE_CACHE,
     #     "CONFIGS_ROOT": pathlib.Path(
