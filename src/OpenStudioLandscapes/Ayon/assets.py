@@ -291,7 +291,7 @@ def compose(
 
         host, container = v.split(":", maxsplit=1)
 
-        ayon_db_dir_host_rel_path = get_relative_path_via_common_root(
+        volume_dir_host_rel_path = get_relative_path_via_common_root(
             context=context,
             path_src=pathlib.Path(env["DOCKER_COMPOSE"]),
             path_dst=pathlib.Path(host),
@@ -299,7 +299,7 @@ def compose(
         )
 
         _volume_relative.append(
-            f"{ayon_db_dir_host_rel_path.as_posix()}:{container}",
+            f"{volume_dir_host_rel_path.as_posix()}:{container}",
         )
 
     # Todo:
