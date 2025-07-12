@@ -1,7 +1,6 @@
 import copy
 
 import json
-import os
 import pathlib
 from collections import ChainMap
 from functools import reduce
@@ -240,6 +239,14 @@ def compose(
 ]:
     """"""
 
+    docker_compose_override = pathlib.Path(
+        env["DOT_LANDSCAPES"],
+        env.get("LANDSCAPE", "default"),
+        f"{ASSET_HEADER['group_name']}__{'__'.join(ASSET_HEADER['key_prefix'])}",
+        "__".join(context.asset_key.path),
+        "docker-compose.override.yml",
+    )
+
     network_dict = {}
     ports_dict = {}
 
@@ -269,13 +276,39 @@ def compose(
     ayon_db_dir_host.mkdir(parents=True, exist_ok=True)
     context.log.info(f"Directory {ayon_db_dir_host.as_posix()} created.")
 
+    # is:      /home/michael/git/repos/OpenStudioLandscapes/.landscapes/2025-07-12-15-44-28-d7511d9a293d496daed627176a026b43/Ayon__Ayon/data/ayon-db/postgresql:/var/lib/postgresql/data:rw
+    # want:    ../../../2025-07-10-22-36-50-47cd6c0a7dd141429707ab6d91190a27/Ayon__Ayon/data/ayon-db/postgresql:/var/lib/postgresql/data:rw
+    # current: ../../../2025-07-12-15-44-28-d7511d9a293d496daed627176a026b43/Ayon__Ayon/data/ayon-db/postgresql:/var/lib/postgresql/data:rw
+
+    # For portability, convert absolute volume paths to relative paths
+    volumes_paths_to_convert = [
+        f"{ayon_db_dir_host.as_posix()}:/var/lib/postgresql/data:rw",
+    ]
+
+    _volume_relative = []
+
+    for v in volumes_paths_to_convert:
+
+        host, container = v.split(":", maxsplit=1)
+
+        ayon_db_dir_host_rel_path = get_relative_path_via_common_root(
+            context=context,
+            path_src=pathlib.Path(env["DOCKER_COMPOSE"]),
+            path_dst=pathlib.Path(host),
+            path_common_root=pathlib.Path(env["DOT_LANDSCAPES"]),
+        )
+
+        _volume_relative.append(
+            f"{ayon_db_dir_host_rel_path.as_posix()}:{container}",
+        )
+
     # Todo:
     #  - [ ] In docker-compose-graph we get /var/lib/postgresql/data twice for some reason.
     #        Do we need to implement a volumes override for this?
     volumes_dict = {
         "volumes": [
             "/etc/localtime:/etc/localtime:ro",
-            f"{ayon_db_dir_host.as_posix()}:/var/lib/postgresql/data:rw",
+            *_volume_relative,
         ]
     }
 
@@ -338,14 +371,6 @@ def compose(
     )
 
     docker_dict = reduce(deep_merge, docker_chainmap.maps)
-
-    docker_compose_override = pathlib.Path(
-        env["DOT_LANDSCAPES"],
-        env.get("LANDSCAPE", "default"),
-        f"{ASSET_HEADER['group_name']}__{'__'.join(ASSET_HEADER['key_prefix'])}",
-        "__".join(context.asset_key.path),
-        "docker-compose.override.yml",
-    )
 
     docker_compose_override.parent.mkdir(parents=True, exist_ok=True)
 
