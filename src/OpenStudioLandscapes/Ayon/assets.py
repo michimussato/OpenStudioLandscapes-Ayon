@@ -276,18 +276,17 @@ def compose(
     ayon_db_dir_host.mkdir(parents=True, exist_ok=True)
     context.log.info(f"Directory {ayon_db_dir_host.as_posix()} created.")
 
-    # is:      /home/michael/git/repos/OpenStudioLandscapes/.landscapes/2025-07-12-15-44-28-d7511d9a293d496daed627176a026b43/Ayon__Ayon/data/ayon-db/postgresql:/var/lib/postgresql/data:rw
-    # want:    ../../../2025-07-10-22-36-50-47cd6c0a7dd141429707ab6d91190a27/Ayon__Ayon/data/ayon-db/postgresql:/var/lib/postgresql/data:rw
-    # current: ../../../2025-07-12-15-44-28-d7511d9a293d496daed627176a026b43/Ayon__Ayon/data/ayon-db/postgresql:/var/lib/postgresql/data:rw
+    volumes_dict = {
+        "volumes": [
+            f"{ayon_db_dir_host.as_posix()}:/var/lib/postgresql/data:rw",
+        ]
+    }
 
     # For portability, convert absolute volume paths to relative paths
-    volumes_paths_to_convert = [
-        f"{ayon_db_dir_host.as_posix()}:/var/lib/postgresql/data:rw",
-    ]
 
     _volume_relative = []
 
-    for v in volumes_paths_to_convert:
+    for v in volumes_dict["volumes"]:
 
         host, container = v.split(":", maxsplit=1)
 
