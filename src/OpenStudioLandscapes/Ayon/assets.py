@@ -301,9 +301,6 @@ def compose(
             f"{volume_dir_host_rel_path.as_posix()}:{container}",
         )
 
-    # Todo:
-    #  - [ ] In docker-compose-graph we get /var/lib/postgresql/data twice for some reason.
-    #        Do we need to implement a volumes override for this?
     volumes_dict = {
         "volumes": [
             "/etc/localtime:/etc/localtime:ro",
