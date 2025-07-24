@@ -141,6 +141,8 @@ def clone_repository(
     repository_dir_full.parent.mkdir(parents=True, exist_ok=True)
 
     repository_ayon["repository_dir_full"] = repository_dir_full.as_posix()
+    repository_ayon["docker_compose"] = "docker-compose.yml"
+    repository_ayon["docker_compose_worker"] = "docker-compose.worker.yml"
     context.log.info(repository_ayon["repository_dir_full"])
 
     try:
@@ -292,7 +294,22 @@ def compose(
 
         volume_dir_host_rel_path = get_relative_path_via_common_root(
             context=context,
-            path_src=pathlib.Path(env["DOCKER_COMPOSE"]),
+            # path_src=pathlib.Path(env["DOCKER_COMPOSE"]),
+            # This leads to a wrong relative path (missing one "parent")
+            # path element.
+            # It uses {DOT_LANDSCAPES}/{LANDSCAPE}/Ayon__Ayon/Ayon__DOCKER_COMPOSE/docker_compose/docker-compose.yml
+            # as the starting point but does not lead to the correct resolution.
+            # In fact, it seems like the actual CWD for this is the docker-compose.yml
+            # from the repo (main entry point) which seems to lead to an incorrect amount
+            # of `cd ..` actions.
+            # Let's try with the yml from the repo as the path_src instead of the one from
+            # "DOCKER_COMPOSE"
+            # => seems to do the trick to make sure, we end up using the directory
+            # we intended to use
+            path_src=pathlib.Path(
+                clone_repository["repository_dir_full"],
+                clone_repository["docker_compose"],
+            ),
             path_dst=pathlib.Path(host),
             path_common_root=pathlib.Path(env["DOT_LANDSCAPES"]),
         )
