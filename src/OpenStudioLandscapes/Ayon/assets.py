@@ -1,13 +1,11 @@
 import copy
-
 import json
 import pathlib
 from collections import ChainMap
 from functools import reduce
-from typing import Generator, MutableMapping, List, Any
+from typing import Any, Generator, List, MutableMapping
 
 import git
-from git.exc import GitCommandError
 import yaml
 from dagster import (
     AssetExecutionContext,
@@ -18,29 +16,26 @@ from dagster import (
     Output,
     asset,
 )
-
+from docker_compose_graph.utils import *
+from docker_compose_graph.yaml_tags.overrides import *
+from git.exc import GitCommandError
+from OpenStudioLandscapes.engine.common_assets.constants import get_constants
+from OpenStudioLandscapes.engine.common_assets.docker_compose_graph import (
+    get_docker_compose_graph,
+)
+from OpenStudioLandscapes.engine.common_assets.docker_config import get_docker_config
+from OpenStudioLandscapes.engine.common_assets.docker_config_json import (
+    get_docker_config_json,
+)
+from OpenStudioLandscapes.engine.common_assets.env import get_env
+from OpenStudioLandscapes.engine.common_assets.feature_out import get_feature_out
+from OpenStudioLandscapes.engine.common_assets.group_in import get_group_in
+from OpenStudioLandscapes.engine.common_assets.group_out import get_group_out
 from OpenStudioLandscapes.engine.constants import *
 from OpenStudioLandscapes.engine.enums import *
 from OpenStudioLandscapes.engine.utils import *
 
 from OpenStudioLandscapes.Ayon.constants import *
-
-from docker_compose_graph.utils import *
-from docker_compose_graph.yaml_tags.overrides import *
-
-from OpenStudioLandscapes.engine.common_assets.constants import get_constants
-from OpenStudioLandscapes.engine.common_assets.docker_config import get_docker_config
-from OpenStudioLandscapes.engine.common_assets.env import get_env
-from OpenStudioLandscapes.engine.common_assets.group_in import get_group_in
-from OpenStudioLandscapes.engine.common_assets.group_out import get_group_out
-from OpenStudioLandscapes.engine.common_assets.docker_compose_graph import (
-    get_docker_compose_graph,
-)
-from OpenStudioLandscapes.engine.common_assets.feature_out import get_feature_out
-from OpenStudioLandscapes.engine.common_assets.docker_config_json import (
-    get_docker_config_json,
-)
-
 
 constants = get_constants(
     ASSET_HEADER=ASSET_HEADER,
@@ -452,11 +447,10 @@ def compose(
 
 @asset(
     **ASSET_HEADER,
-    ins={
-    },
+    ins={},
 )
 def cmd_extend(
-        context: AssetExecutionContext,
+    context: AssetExecutionContext,
 ) -> Generator[Output[list[Any]] | AssetMaterialization | Any, Any, None]:
 
     ret = []
@@ -473,17 +467,13 @@ def cmd_extend(
 
 @asset(
     **ASSET_HEADER,
-    ins={
-    },
+    ins={},
 )
 def cmd_append(
-        context: AssetExecutionContext,
+    context: AssetExecutionContext,
 ) -> Generator[Output[dict[str, list[Any]]] | AssetMaterialization | Any, Any, None]:
 
-    ret = {
-        "cmd": [],
-        "exclude_from_quote": []
-    }
+    ret = {"cmd": [], "exclude_from_quote": []}
 
     yield Output(ret)
 

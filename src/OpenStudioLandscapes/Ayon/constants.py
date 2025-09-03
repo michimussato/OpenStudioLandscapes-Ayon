@@ -7,23 +7,22 @@ __all__ = [
 
 import pathlib
 from pathlib import Path
-from typing import Generator, Any
+from typing import Any, Generator
 
 from dagster import (
-    multi_asset,
-    AssetOut,
-    AssetMaterialization,
     AssetExecutionContext,
-    Output,
+    AssetMaterialization,
+    AssetOut,
     MetadataValue,
+    Output,
     get_dagster_logger,
+    multi_asset,
 )
 
 LOGGER = get_dagster_logger(__name__)
 
 from OpenStudioLandscapes.engine.constants import DOCKER_USE_CACHE_GLOBAL
 from OpenStudioLandscapes.engine.enums import OpenStudioLandscapesConfig
-
 
 DOCKER_USE_CACHE = DOCKER_USE_CACHE_GLOBAL or False
 # Todo:
