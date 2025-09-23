@@ -52,6 +52,7 @@ FEATURE_CONFIGS = {
         )
         .expanduser()
         .as_posix(),
+        "AYON_HOSTNAME": "ayon",
         "AYON_PORT_HOST": "5005",
         "AYON_PORT_CONTAINER": "5000",
         # Todo
@@ -71,6 +72,8 @@ FEATURE_CONFIGS = {
         )
         .expanduser()
         .as_posix(),
+        "TELEPORT_ENTRY_POINT_HOST": "{{AYON_HOSTNAME}}",  # Either a hardcoded str or a ref to a Variable (with double {{ }}!)
+        "TELEPORT_ENTRY_POINT_PORT": "{{AYON_PORT_HOST}}",  # Either a hardcoded str or a ref to a Variable (with double {{ }}!)
     },
     # OpenStudioLandscapesConfig.DEVELOPMENT: {
     #     "DOCKER_USE_CACHE": DOCKER_USE_CACHE,

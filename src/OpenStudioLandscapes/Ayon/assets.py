@@ -336,7 +336,7 @@ def compose(
     container_name_server = "--".join(
         [f"ayon-{service_name_server}", env.get("LANDSCAPE", "default")]
     )
-    host_name_server = ".".join([service_name_server, env["ROOT_DOMAIN"]])
+    host_name_server = ".".join([env["AYON_HOSTNAME"] or service_name_server, env["ROOT_DOMAIN"]])
 
     docker_dict_override = {
         "services": {
