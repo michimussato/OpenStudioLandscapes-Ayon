@@ -191,6 +191,9 @@ The following variables are being declared in `OpenStudioLandscapes.Ayon.constan
 | Variable                      | Type   | Value                                                      |
 | :---------------------------- | :----- | :--------------------------------------------------------- |
 | `DOCKER_USE_CACHE`            | `bool` | `False`                                                    |
+| `HOSTNAME`                    | `str`  | `ayon`                                                     |
+| `TELEPORT_ENTRY_POINT_HOST`   | `str`  | `{{HOSTNAME}}`                                             |
+| `TELEPORT_ENTRY_POINT_PORT`   | `str`  | `{{AYON_PORT_HOST}}`                                       |
 | `CONFIGS_ROOT`                | `str`  | `{DOT_FEATURES}/OpenStudioLandscapes-Ayon/.payload/config` |
 | `AYON_PORT_HOST`              | `str`  | `5005`                                                     |
 | `AYON_PORT_CONTAINER`         | `str`  | `5000`                                                     |
@@ -200,11 +203,12 @@ The following variables are being declared in `OpenStudioLandscapes.Ayon.constan
 
 | Feature                             | GitHub                                                                                                                                     | Discord                                                                |
 | ----------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------ | ---------------------------------------------------------------------- |
-| OpenStudioLandscapes                | [https://github.com/michimussato/OpenStudioLandscapes](https://github.com/michimussato/OpenStudioLandscapes)                               | [# openstudiolandscapes-general](https://discord.com/invite/aYnJnaqE)  |
-| OpenStudioLandscapes-Ayon           | [https://github.com/michimussato/OpenStudioLandscapes-Ayon](https://github.com/michimussato/OpenStudioLandscapes-Ayon)                     | [# openstudiolandscapes-ayon](https://discord.gg/D4XrG99G)             |
-| OpenStudioLandscapes-Dagster        | [https://github.com/michimussato/OpenStudioLandscapes-Dagster](https://github.com/michimussato/OpenStudioLandscapes-Dagster)               | [# openstudiolandscapes-dagster](https://discord.gg/qFGWTWu4)          |
-| OpenStudioLandscapes-Kitsu          | [https://github.com/michimussato/OpenStudioLandscapes-Kitsu](https://github.com/michimussato/OpenStudioLandscapes-Kitsu)                   | [# openstudiolandscapes-kitsu](https://discord.gg/4UqHdsan)            |
+| OpenStudioLandscapes                | [https://github.com/michimussato/OpenStudioLandscapes](https://github.com/michimussato/OpenStudioLandscapes)                               | [# openstudiolandscapes-general](https://discord.gg/F6bDRWsHac)        |
+| OpenStudioLandscapes-Ayon           | [https://github.com/michimussato/OpenStudioLandscapes-Ayon](https://github.com/michimussato/OpenStudioLandscapes-Ayon)                     | [# openstudiolandscapes-ayon](https://discord.gg/gd6etWAF3v)           |
+| OpenStudioLandscapes-Dagster        | [https://github.com/michimussato/OpenStudioLandscapes-Dagster](https://github.com/michimussato/OpenStudioLandscapes-Dagster)               | [# openstudiolandscapes-dagster](https://discord.gg/jwB3DwmKvs)        |
+| OpenStudioLandscapes-Kitsu          | [https://github.com/michimussato/OpenStudioLandscapes-Kitsu](https://github.com/michimussato/OpenStudioLandscapes-Kitsu)                   | [# openstudiolandscapes-kitsu](https://discord.gg/6cc6mkReJ7)          |
 | OpenStudioLandscapes-RustDeskServer | [https://github.com/michimussato/OpenStudioLandscapes-RustDeskServer](https://github.com/michimussato/OpenStudioLandscapes-RustDeskServer) | [# openstudiolandscapes-rustdeskserver](https://discord.gg/nJ8Ffd2xY3) |
+| OpenStudioLandscapes-Teleport       | [https://github.com/michimussato/OpenStudioLandscapes-Teleport](https://github.com/michimussato/OpenStudioLandscapes-Teleport)             | [# openstudiolandscapes-teleport](https://discord.gg/SNMCw5aDfm)       |
 | OpenStudioLandscapes-Template       | [https://github.com/michimussato/OpenStudioLandscapes-Template](https://github.com/michimussato/OpenStudioLandscapes-Template)             | [# openstudiolandscapes-template](https://discord.gg/J59GYp3Wpy)       |
 | OpenStudioLandscapes-Twingate       | [https://github.com/michimussato/OpenStudioLandscapes-Twingate](https://github.com/michimussato/OpenStudioLandscapes-Twingate)             | [# openstudiolandscapes-twingate](https://discord.gg/tREYa6UNJf)       |
 

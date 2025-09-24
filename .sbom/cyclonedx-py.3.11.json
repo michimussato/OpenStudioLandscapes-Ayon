@@ -149,7 +149,7 @@
         {
           "comment": "PackageSource: VCS 'git'",
           "type": "vcs",
-          "url": "https://github.com/michimussato/OpenStudioLandscapes#1956bea51cd741278d2a389297c528b2a88b562b"
+          "url": "https://github.com/michimussato/OpenStudioLandscapes#e5a206a76ff7a4012bafe7fbc05e8875b993e53e"
         },
         {
           "comment": "from packaging metadata Project-URL: Homepage",
@@ -161,14 +161,14 @@
       "properties": [
         {
           "name": "cdx:python:package:source:vcs:commit_id",
-          "value": "1956bea51cd741278d2a389297c528b2a88b562b"
+          "value": "e5a206a76ff7a4012bafe7fbc05e8875b993e53e"
         },
         {
           "name": "cdx:python:package:source:vcs:requested_revision",
-          "value": "v1.4.0-rc1"
+          "value": "v1.5.0-rc1"
         }
       ],
-      "purl": "pkg:pypi/openstudiolandscapes@0.0.0?vcs_url=git%2Bhttps://github.com/michimussato/OpenStudioLandscapes%401956bea51cd741278d2a389297c528b2a88b562b",
+      "purl": "pkg:pypi/openstudiolandscapes@0.0.0?vcs_url=git%2Bhttps://github.com/michimussato/OpenStudioLandscapes%40e5a206a76ff7a4012bafe7fbc05e8875b993e53e",
       "type": "library",
       "version": "0.0.0"
     },
@@ -670,7 +670,7 @@
       "version": "3.4.3"
     },
     {
-      "bom-ref": "click==8.2.1",
+      "bom-ref": "click==8.3.0",
       "description": "Composable command line interface toolkit",
       "externalReferences": [
         {
@@ -708,9 +708,9 @@
         }
       ],
       "name": "click",
-      "purl": "pkg:pypi/click@8.2.1",
+      "purl": "pkg:pypi/click@8.3.0",
       "type": "library",
-      "version": "8.2.1"
+      "version": "8.3.0"
     },
     {
       "bom-ref": "coloredlogs==14.0",
@@ -1425,7 +1425,7 @@
       "version": "3.2.4"
     },
     {
-      "bom-ref": "grpcio==1.74.0",
+      "bom-ref": "grpcio==1.75.0",
       "description": "HTTP/2-based RPC framework",
       "externalReferences": [
         {
@@ -1458,9 +1458,9 @@
         }
       ],
       "name": "grpcio",
-      "purl": "pkg:pypi/grpcio@1.74.0",
+      "purl": "pkg:pypi/grpcio@1.75.0",
       "type": "library",
-      "version": "1.74.0"
+      "version": "1.75.0"
     },
     {
       "bom-ref": "grpcio-health-checking==1.71.2",
@@ -1710,7 +1710,7 @@
       "version": "2025.9.1"
     },
     {
-      "bom-ref": "lark==1.2.2",
+      "bom-ref": "lark==1.3.0",
       "description": "a modern parsing library",
       "externalReferences": [
         {
@@ -1733,9 +1733,9 @@
         }
       ],
       "name": "lark",
-      "purl": "pkg:pypi/lark@1.2.2",
+      "purl": "pkg:pypi/lark@1.3.0",
       "type": "library",
-      "version": "1.2.2"
+      "version": "1.3.0"
     },
     {
       "bom-ref": "license-expression==30.4.4",
@@ -1761,7 +1761,7 @@
       "version": "30.4.4"
     },
     {
-      "bom-ref": "lxml==6.0.1",
+      "bom-ref": "lxml==6.0.2",
       "description": "Powerful and Pythonic XML processing library combining libxml2/libxslt with the ElementTree API.",
       "externalReferences": [
         {
@@ -1786,18 +1786,12 @@
             "acknowledgement": "declared",
             "id": "BSD-3-Clause"
           }
-        },
-        {
-          "license": {
-            "acknowledgement": "declared",
-            "name": "License :: OSI Approved :: BSD License"
-          }
         }
       ],
       "name": "lxml",
-      "purl": "pkg:pypi/lxml@6.0.1",
+      "purl": "pkg:pypi/lxml@6.0.2",
       "type": "library",
-      "version": "6.0.1"
+      "version": "6.0.2"
     },
     {
       "bom-ref": "markdown-it-py==4.0.0",
@@ -2204,7 +2198,7 @@
       "version": "2.1.0"
     },
     {
-      "bom-ref": "pydantic==2.11.7",
+      "bom-ref": "pydantic==2.11.9",
       "description": "Data validation using Python type hints",
       "externalReferences": [
         {
@@ -2242,9 +2236,9 @@
         }
       ],
       "name": "pydantic",
-      "purl": "pkg:pypi/pydantic@2.11.7",
+      "purl": "pkg:pypi/pydantic@2.11.9",
       "type": "library",
-      "version": "2.11.7"
+      "version": "2.11.9"
     },
     {
       "bom-ref": "pydantic_core==2.33.2",
@@ -2318,8 +2312,8 @@
       "version": "4.0.1"
     },
     {
-      "bom-ref": "pyparsing==3.2.3",
-      "description": "pyparsing module - Classes and methods to define and execute parsing grammars",
+      "bom-ref": "pyparsing==3.2.5",
+      "description": "pyparsing - Classes and methods to define and execute parsing grammars",
       "externalReferences": [
         {
           "comment": "from packaging metadata Project-URL: Homepage",
@@ -2336,9 +2330,9 @@
         }
       ],
       "name": "pyparsing",
-      "purl": "pkg:pypi/pyparsing@3.2.3",
+      "purl": "pkg:pypi/pyparsing@3.2.5",
       "type": "library",
-      "version": "3.2.3"
+      "version": "3.2.5"
     },
     {
       "bom-ref": "python-dateutil==2.9.0.post0",
@@ -3428,7 +3422,7 @@
       "ref": "charset-normalizer==3.4.3"
     },
     {
-      "ref": "click==8.2.1"
+      "ref": "click==8.3.0"
     },
     {
       "dependsOn": [
@@ -3454,7 +3448,7 @@
       "dependsOn": [
         "jsonschema==4.25.1",
         "license-expression==30.4.4",
-        "lxml==6.0.1",
+        "lxml==6.0.2",
         "packageurl-python==0.17.5",
         "py-serializable==2.1.0",
         "referencing==0.36.2",
@@ -3480,7 +3474,7 @@
         "SQLAlchemy==2.0.43",
         "alembic==1.16.5",
         "antlr4-python3-runtime==4.13.2",
-        "click==8.2.1",
+        "click==8.3.0",
         "coloredlogs==14.0",
         "dagster-pipes==1.9.11",
         "docker==7.1.0",
@@ -3488,10 +3482,10 @@
         "filelock==3.19.1",
         "fsspec==2025.9.0",
         "grpcio-health-checking==1.71.2",
-        "grpcio==1.74.0",
+        "grpcio==1.75.0",
         "packaging==25.0",
         "protobuf==5.29.5",
-        "pydantic==2.11.7",
+        "pydantic==2.11.9",
         "python-dotenv==1.1.1",
         "pytz==2025.2",
         "requests==2.32.5",
@@ -3576,13 +3570,16 @@
     },
     {
       "dependsOn": [
-        "grpcio==1.74.0",
+        "grpcio==1.75.0",
         "protobuf==5.29.5"
       ],
       "ref": "grpcio-health-checking==1.71.2"
     },
     {
-      "ref": "grpcio==1.74.0"
+      "dependsOn": [
+        "typing_extensions==4.15.0"
+      ],
+      "ref": "grpcio==1.75.0"
     },
     {
       "ref": "humanfriendly==10.0"
@@ -3624,7 +3621,7 @@
       "ref": "jsonschema==4.25.1"
     },
     {
-      "ref": "lark==1.2.2"
+      "ref": "lark==1.3.0"
     },
     {
       "dependsOn": [
@@ -3633,7 +3630,7 @@
       "ref": "license-expression==30.4.4"
     },
     {
-      "ref": "lxml==6.0.1"
+      "ref": "lxml==6.0.2"
     },
     {
       "dependsOn": [
@@ -3672,7 +3669,7 @@
     {
       "dependsOn": [
         "packaging==25.0",
-        "pyparsing==3.2.3"
+        "pyparsing==3.2.5"
       ],
       "ref": "pip-requirements-parser==32.0.1"
     },
@@ -3710,7 +3707,7 @@
         "typing-inspection==0.4.1",
         "typing_extensions==4.15.0"
       ],
-      "ref": "pydantic==2.11.7"
+      "ref": "pydantic==2.11.9"
     },
     {
       "dependsOn": [
@@ -3721,7 +3718,7 @@
     {
       "dependsOn": [
         "chardet==5.2.0",
-        "pyparsing==3.2.3"
+        "pyparsing==3.2.5"
       ],
       "ref": "pydot==4.0.1"
     },
@@ -3729,7 +3726,7 @@
       "dependsOn": [
         "Jinja2==3.1.6"
       ],
-      "ref": "pyparsing==3.2.3"
+      "ref": "pyparsing==3.2.5"
     },
     {
       "dependsOn": [
@@ -3739,7 +3736,7 @@
     },
     {
       "dependsOn": [
-        "click==8.2.1"
+        "click==8.3.0"
       ],
       "ref": "python-dotenv==1.1.1"
     },
@@ -3775,7 +3772,7 @@
     },
     {
       "dependsOn": [
-        "lark==1.2.2"
+        "lark==1.3.0"
       ],
       "ref": "rfc3987-syntax==1.1.0"
     },
@@ -3846,7 +3843,7 @@
       "dependsOn": [
         "fsspec==2025.9.0",
         "packaging==25.0",
-        "pydantic==2.11.7",
+        "pydantic==2.11.9",
         "requests==2.32.5",
         "typing_extensions==4.15.0"
       ],
@@ -3880,7 +3877,7 @@
     }
   ],
   "metadata": {
-    "timestamp": "2025-09-09T09:39:38.112139+00:00",
+    "timestamp": "2025-09-24T11:57:15.579015+00:00",
     "tools": {
       "components": [
         {
@@ -3984,7 +3981,7 @@
       ]
     }
   },
-  "serialNumber": "urn:uuid:c54a159b-5b81-4944-825e-30dc4b969422",
+  "serialNumber": "urn:uuid:7b7a743e-9061-4505-824c-4b4a8b44f352",
   "version": 1,
   "$schema": "http://cyclonedx.org/schema/bom-1.6.schema.json",
   "bomFormat": "CycloneDX",
