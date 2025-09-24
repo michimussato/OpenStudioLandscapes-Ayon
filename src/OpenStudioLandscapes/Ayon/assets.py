@@ -324,39 +324,39 @@ def compose(
     container_name_postgres = "--".join(
         [f"ayon-{service_name_postgres}", env.get("LANDSCAPE", "default")]
     )
-    host_name_postgres = ".".join([service_name_postgres, env["ROOT_DOMAIN"]])
+    host_name_postgres = ".".join([service_name_postgres, env["OPENSTUDIOLANDSCAPES__DOMAIN_LAN"]])
 
     service_name_redis = "redis"
     container_name_redis = "--".join(
         [f"ayon-{service_name_redis}", env.get("LANDSCAPE", "default")]
     )
-    host_name_redis = ".".join([service_name_redis, env["ROOT_DOMAIN"]])
+    host_name_redis = ".".join([service_name_redis, env["OPENSTUDIOLANDSCAPES__DOMAIN_LAN"]])
 
     service_name_server = "server"
     container_name_server = "--".join(
         [f"ayon-{service_name_server}", env.get("LANDSCAPE", "default")]
     )
-    host_name_server = ".".join([env["AYON_HOSTNAME"] or service_name_server, env["ROOT_DOMAIN"]])
+    host_name_server = ".".join([env["HOSTNAME"] or service_name_server, env["OPENSTUDIOLANDSCAPES__DOMAIN_LAN"]])
 
     docker_dict_override = {
         "services": {
             service_name_postgres: {
                 "container_name": container_name_postgres,
                 "hostname": host_name_postgres,
-                "domainname": env.get("ROOT_DOMAIN"),
+                "domainname": env.get("OPENSTUDIOLANDSCAPES__DOMAIN_LAN"),
                 **copy.deepcopy(volumes_dict),
                 **copy.deepcopy(network_dict),
             },
             service_name_redis: {
                 "container_name": container_name_redis,
                 "hostname": host_name_redis,
-                "domainname": env.get("ROOT_DOMAIN"),
+                "domainname": env.get("OPENSTUDIOLANDSCAPES__DOMAIN_LAN"),
                 **copy.deepcopy(network_dict),
             },
             service_name_server: {
                 "container_name": container_name_server,
                 "hostname": host_name_server,
-                "domainname": env.get("ROOT_DOMAIN"),
+                "domainname": env.get("OPENSTUDIOLANDSCAPES__DOMAIN_LAN"),
                 # Todo:
                 #  - [ ] healthcheck failure: https://github.com/ynput/ayon-docker/issues/34
                 #  - [ ] Need to find out whether `ports` Override
