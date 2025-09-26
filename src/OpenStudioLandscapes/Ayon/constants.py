@@ -22,7 +22,7 @@ from dagster import (
 LOGGER = get_dagster_logger(__name__)
 
 from OpenStudioLandscapes.engine.constants import DOCKER_USE_CACHE_GLOBAL
-from OpenStudioLandscapes.engine.enums import OpenStudioLandscapesConfig
+from OpenStudioLandscapes.engine.enums import OpenStudioLandscapesConfig, FeatureVolumeType
 
 DOCKER_USE_CACHE = DOCKER_USE_CACHE_GLOBAL or False
 # Todo:
@@ -63,17 +63,26 @@ FEATURE_CONFIGS = {
         #        https://docs.ayon.dev/docs/admin_server_deployment#installation
         # "AYON_USERNAME": None,
         # "AYON_PASSWORD": None,
-        # db
-        # Inside Landscape:
-        "AYON_DB_INSTALL_DESTINATION": pathlib.Path(
-            "{DOT_LANDSCAPES}",
-            "{LANDSCAPE}",
-            f"{GROUP}__{'__'.join(KEY)}",
-            "data",
-            "ayon-db",
-        )
-        .expanduser()
-        .as_posix(),
+        "AYON_DB_INSTALL_DESTINATION": {
+            FeatureVolumeType.CONTAINED: pathlib.Path(
+                "{DOT_LANDSCAPES}",
+                "{LANDSCAPE}",
+                f"{GROUP}__{'__'.join(KEY)}",
+                "data",
+                "ayon-db",
+            )
+            .expanduser()
+            .as_posix(),
+            FeatureVolumeType.SHARED: pathlib.Path(
+                "{DOT_LANDSCAPES}",
+                "{DOT_SHARED_VOLUMES}",
+                f"{GROUP}__{'__'.join(KEY)}",
+                "data",
+                "ayon-db",
+            )
+            .expanduser()
+            .as_posix(),
+        }[FeatureVolumeType.CONTAINED]
     },
     # OpenStudioLandscapesConfig.DEVELOPMENT: {
     #     "DOCKER_USE_CACHE": DOCKER_USE_CACHE,
