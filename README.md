@@ -200,11 +200,11 @@ To follow up on the previous LinkedIn publications, visit:
 
 # Official Resources
 
-[![ Logo Ayon ](https://ynput.io/wp-content/uploads/2023/04/ayon-whiteg-dot.svg)](https://ynput.io/ayon/)
+[![Logo Ayon ](https://ynput.io/wp-content/uploads/2023/04/ayon-whiteg-dot.svg)](https://ynput.io/ayon/)
 
 Ayon is written and maintained by Ynput, a company based in Czech Republic:
 
-[![ Logo Ynput ](https://ynput.io/wp-content/uploads/2022/09/ynput-logo-small-bg.svg)](https://ynput.io)
+[![Logo Ynput ](https://ynput.io/wp-content/uploads/2022/09/ynput-logo-small-bg.svg)](https://ynput.io)
 
 Ynput offers different versions of Ayon
 
