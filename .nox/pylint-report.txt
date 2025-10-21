@@ -55,5 +55,5 @@ src/OpenStudioLandscapes/Ayon/__init__.py:1:0: C0103: Module name "Ayon" doesn't
 src/OpenStudioLandscapes/Ayon/__init__.py:11:4: C0103: Constant name "dist_name" doesn't conform to UPPER_CASE naming style (invalid-name)
 
 ------------------------------------------------------------------
-Your code has been rated at 7.29/10 (previous run: 7.33/10, -0.04)
+Your code has been rated at 7.29/10 (previous run: 6.60/10, +0.69)
 
