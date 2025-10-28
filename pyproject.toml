@@ -94,9 +94,13 @@ code_location_name = "OpenStudioLandscapes-Ayon"
 module_name = "OpenStudioLandscapes.Ayon.definitions"
 
 [tool.setuptools]
+include-package-data = true
 packages = [
     "OpenStudioLandscapes.Ayon",
 ]
 platforms = [
     "Linux",
 ]
+
+[tool.setuptools.package-dir]
+"" = "src"
