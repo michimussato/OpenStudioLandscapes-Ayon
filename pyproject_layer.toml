@@ -1,0 +1,31 @@
+[project]
+name = "OpenStudioLandscapes-Ayon"
+description = "Ayon Feature for OpenStudioLandscapes"
+
+[project.urls]
+Homepage = "https://github.com/michimussato/OpenStudioLandscapes-Ayon"
+
+[project.optional-dependencies]
+sbom = [
+    "OpenStudioLandscapes-Ayon[graphviz]",
+]
+nox = [
+    "OpenStudioLandscapes-Ayon[testing]",
+]
+dev = [
+    "OpenStudioLandscapes-Ayon[testing]",
+    "OpenStudioLandscapes-Ayon[lint]",
+    "OpenStudioLandscapes-Ayon[nox]",
+    "OpenStudioLandscapes-Ayon[sbom]",
+    "OpenStudioLandscapes-Ayon[coverage]",
+    "OpenStudioLandscapes-Ayon[readme]",
+]
+
+[tool.setuptools]
+packages = [
+    "OpenStudioLandscapes.Ayon"
+]
+
+[tool.dagster]
+module_name = "OpenStudioLandscapes.Ayon.definitions"
+code_location_name = "OpenStudioLandscapes-Ayon"
