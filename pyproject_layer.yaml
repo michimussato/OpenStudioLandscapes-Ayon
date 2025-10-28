@@ -1,0 +1,24 @@
+project:
+  description: Ayon Feature for OpenStudioLandscapes
+  name: OpenStudioLandscapes-Ayon
+  optional-dependencies:
+    dev:
+    - OpenStudioLandscapes-Ayon[testing]
+    - OpenStudioLandscapes-Ayon[lint]
+    - OpenStudioLandscapes-Ayon[nox]
+    - OpenStudioLandscapes-Ayon[sbom]
+    - OpenStudioLandscapes-Ayon[coverage]
+    - OpenStudioLandscapes-Ayon[readme]
+    nox:
+    - OpenStudioLandscapes-Ayon[testing]
+    sbom:
+    - OpenStudioLandscapes-Ayon[graphviz]
+  urls:
+    Homepage: https://github.com/michimussato/OpenStudioLandscapes-Ayon
+tool:
+  dagster:
+    code_location_name: OpenStudioLandscapes-Ayon
+    module_name: OpenStudioLandscapes.Ayon.definitions
+  setuptools:
+    packages:
+    - OpenStudioLandscapes.Ayon
