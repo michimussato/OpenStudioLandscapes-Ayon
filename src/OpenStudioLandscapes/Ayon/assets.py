@@ -321,30 +321,27 @@ def compose(
     }
 
     service_name_postgres = "postgres"
-    container_name_postgres = "--".join(
-        [f"ayon-{service_name_postgres}", env.get("LANDSCAPE", "default")]
-    )
-    host_name_postgres = ".".join(
-        [service_name_postgres, env["OPENSTUDIOLANDSCAPES__DOMAIN_LAN"]]
+    container_name_postgres, host_name_postgres = get_docker_compose_names(
+        context=context,
+        service_name=service_name_postgres,
+        landscape_id=env.get("LANDSCAPE", "default"),
+        domain_lan=env.get("OPENSTUDIOLANDSCAPES__DOMAIN_LAN"),
     )
 
     service_name_redis = "redis"
-    container_name_redis = "--".join(
-        [f"ayon-{service_name_redis}", env.get("LANDSCAPE", "default")]
-    )
-    host_name_redis = ".".join(
-        [service_name_redis, env["OPENSTUDIOLANDSCAPES__DOMAIN_LAN"]]
+    container_name_redis, host_name_redis = get_docker_compose_names(
+        context=context,
+        service_name=service_name_redis,
+        landscape_id=env.get("LANDSCAPE", "default"),
+        domain_lan=env.get("OPENSTUDIOLANDSCAPES__DOMAIN_LAN"),
     )
 
     service_name_server = "server"
-    container_name_server = "--".join(
-        [f"ayon-{service_name_server}", env.get("LANDSCAPE", "default")]
-    )
-    host_name_server = ".".join(
-        [
-            env["HOSTNAME"] or service_name_server,
-            env["OPENSTUDIOLANDSCAPES__DOMAIN_LAN"],
-        ]
+    container_name_server, host_name_server = get_docker_compose_names(
+        context=context,
+        service_name=service_name_server,
+        landscape_id=env.get("LANDSCAPE", "default"),
+        domain_lan=env.get("OPENSTUDIOLANDSCAPES__DOMAIN_LAN"),
     )
 
     docker_dict_override = {
