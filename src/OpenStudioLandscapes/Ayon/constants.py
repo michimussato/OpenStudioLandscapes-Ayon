@@ -47,15 +47,15 @@ ASSET_HEADER = {
 FEATURE_CONFIGS = {
     OpenStudioLandscapesConfig.DEFAULT: {
         "DOCKER_USE_CACHE": DOCKER_USE_CACHE,
-        "HOSTNAME": "ayon",
-        # "CONFIGS_ROOT": pathlib.Path(
-        #     "{DOT_FEATURES}",
-        #     FEATURE,
-        #     ".payload",
-        #     "config",
-        # )
-        # .expanduser()
-        # .as_posix(),
+        # "HOSTNAME": "ayon",
+        "CONFIGS_ROOT": pathlib.Path(
+            "{DOT_FEATURES}",
+            FEATURE,
+            ".payload",
+            "config",
+        )
+        .expanduser()
+        .as_posix(),
         "AYON_PORT_HOST": "5005",
         "AYON_PORT_CONTAINER": "5000",
         # Todo

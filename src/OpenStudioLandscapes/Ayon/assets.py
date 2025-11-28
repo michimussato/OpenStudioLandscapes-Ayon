@@ -1,11 +1,9 @@
 import copy
 import json
 import pathlib
-import textwrap
 from collections import ChainMap
 from functools import reduce
-from typing import Any, Generator, List, MutableMapping, Dict
-from dotenv import set_key
+from typing import Any, Generator, List, MutableMapping
 
 import git
 import yaml
@@ -176,17 +174,15 @@ def compose_networks(
     None,
 ]:
 
-    # Todo
-    #  - [ ] refactor this logic
     compose_network_mode = DockerComposePolicies.NETWORK_MODE.DEFAULT
 
     if compose_network_mode is DockerComposePolicies.NETWORK_MODE.DEFAULT:
         docker_dict = {
-            # "networks": {
-            #     "ayon": {
-            #         "name": "network_ayon-10-2",
-            #     },
-            # },
+            "networks": {
+                "ayon": {
+                    "name": "network_ayon-10-2",
+                },
+            },
         }
 
     else:
@@ -226,11 +222,6 @@ def compose_networks(
             AssetKey([*ASSET_HEADER["key_prefix"], "clone_repository"]),
         ),
     },
-    description=textwrap.dedent(
-        """
-        __CUSTOM IMPLEMENTATION__
-        """
-    )
 )
 def compose(
     context: AssetExecutionContext,
@@ -256,19 +247,17 @@ def compose(
     network_dict = {}
     ports_dict = {}
 
-    if "network_mode" in compose_networks:
-        network_dict = {"network_mode": compose_networks.get("network_mode")}
-
-    else:
+    if "networks" in compose_networks:
         network_dict = {"networks": list(compose_networks.get("networks", {}).keys())}
         ports_dict = {
             "ports": OverrideArray(
                 [
-                    # f"${{AYON_PORT_HOST}}:{env.get('AYON_PORT_CONTAINER')}",
-                    "${AYON_PORT_HOST}:${AYON_PORT_CONTAINER}",
+                    f"{env.get('AYON_PORT_HOST')}:{env.get('AYON_PORT_CONTAINER')}",
                 ]
             ),
         }
+    elif "network_mode" in compose_networks:
+        network_dict = {"network_mode": compose_networks.get("network_mode")}
 
     parent = (
         pathlib.Path(clone_repository["repository_dir_full"]) / "docker-compose.yml"
@@ -332,54 +321,48 @@ def compose(
     }
 
     service_name_postgres = "postgres"
-    container_name_postgres = "--".join(
-        [f"ayon-{service_name_postgres}", env.get("LANDSCAPE", "default")]
+    container_name_postgres, host_name_postgres = get_docker_compose_names(
+        context=context,
+        service_name=service_name_postgres,
+        landscape_id=env.get("LANDSCAPE", "default"),
+        domain_lan=env.get("OPENSTUDIOLANDSCAPES__DOMAIN_LAN"),
     )
-    # host_name_postgres = ".".join(
-    #     [service_name_postgres, env["OPENSTUDIOLANDSCAPES__DOMAIN_LAN"]]
-    # )
 
     service_name_redis = "redis"
-    container_name_redis = "--".join(
-        [f"ayon-{service_name_redis}", env.get("LANDSCAPE", "default")]
+    container_name_redis, host_name_redis = get_docker_compose_names(
+        context=context,
+        service_name=service_name_redis,
+        landscape_id=env.get("LANDSCAPE", "default"),
+        domain_lan=env.get("OPENSTUDIOLANDSCAPES__DOMAIN_LAN"),
     )
-    # host_name_redis = ".".join(
-    #     [service_name_redis, env["OPENSTUDIOLANDSCAPES__DOMAIN_LAN"]]
-    # )
 
     service_name_server = "server"
-    container_name_server = "--".join(
-        [f"ayon-{service_name_server}", env.get("LANDSCAPE", "default")]
+    container_name_server, host_name_server = get_docker_compose_names(
+        context=context,
+        service_name=service_name_server,
+        landscape_id=env.get("LANDSCAPE", "default"),
+        domain_lan=env.get("OPENSTUDIOLANDSCAPES__DOMAIN_LAN"),
     )
-    # host_name_server = ".".join(
-    #     [
-    #         env["HOSTNAME"] or service_name_server,
-    #         env["OPENSTUDIOLANDSCAPES__DOMAIN_LAN"],
-    #     ]
-    # )
 
     docker_dict_override = {
         "services": {
             service_name_postgres: {
                 "container_name": container_name_postgres,
-                "env_file": "./.env",
-                # "hostname": host_name_postgres,
-                # "domainname": env.get("OPENSTUDIOLANDSCAPES__DOMAIN_LAN"),
+                "hostname": host_name_postgres,
+                "domainname": env.get("OPENSTUDIOLANDSCAPES__DOMAIN_LAN"),
                 **copy.deepcopy(volumes_dict),
                 **copy.deepcopy(network_dict),
             },
             service_name_redis: {
                 "container_name": container_name_redis,
-                "env_file": "./.env",
-                # "hostname": host_name_redis,
-                # "domainname": env.get("OPENSTUDIOLANDSCAPES__DOMAIN_LAN"),
+                "hostname": host_name_redis,
+                "domainname": env.get("OPENSTUDIOLANDSCAPES__DOMAIN_LAN"),
                 **copy.deepcopy(network_dict),
             },
             service_name_server: {
                 "container_name": container_name_server,
-                "env_file": "./.env",
-                # "hostname": host_name_server,
-                # "domainname": env.get("OPENSTUDIOLANDSCAPES__DOMAIN_LAN"),
+                "hostname": host_name_server,
+                "domainname": env.get("OPENSTUDIOLANDSCAPES__DOMAIN_LAN"),
                 # Todo:
                 #  - [ ] healthcheck failure: https://github.com/ynput/ayon-docker/issues/34
                 #  - [ ] Need to find out whether `ports` Override
@@ -424,12 +407,12 @@ def compose(
     dot_landscapes = pathlib.Path(env["DOT_LANDSCAPES"])
 
     # Todo:
-    #  - [ ] externalize; this is implemented
-    #        in OpenStudioLandscapes.engine.compose_scopes.default.assets.compose
-
-    # Convert absolute paths in `include` to
-    # relative ones
-    for path in [docker_compose_override]:
+    #  - [ ] find a better way to implement relpath with `from` and `via`
+    #  - [ ] externalize
+    for path in [
+        parent.as_posix(),
+        docker_compose_override.as_posix(),
+    ]:
         rel_path = get_relative_path_via_common_root(
             context=context,
             path_src=DOCKER_COMPOSE,
@@ -439,7 +422,7 @@ def compose(
 
         rel_paths.append(rel_path.as_posix())
 
-    docker_dict_include: Dict = {
+    docker_dict_include = {
         "include": [
             {
                 "path": rel_paths,
@@ -453,26 +436,6 @@ def compose(
     with open(DOCKER_COMPOSE, mode="w", encoding="utf-8") as fw:
         fw.write(docker_yaml_include)
 
-    # Write .env
-    dot_env = docker_compose_override.parent / ".env"
-    with open(dot_env, mode="w", encoding="utf-8") as fw:
-        pass
-
-    # Add content to .env
-    for k, v in env.items():
-        context.log.debug(f"{k} = {v}")
-        set_key(
-            dotenv_path=dot_env,
-            key_to_set=k,
-            value_to_set=str(v),
-            quote_mode=["always", "auto", "never"][1],
-            export=False,
-            encoding="utf-8",
-        )
-
-    with open(dot_env, "r") as fr:
-        lines = fr.read()
-
     yield Output(docker_dict_include)
 
     yield AssetMaterialization(
@@ -484,7 +447,6 @@ def compose(
             ),
             "path_docker_yaml_override": MetadataValue.path(docker_compose_override),
             # Todo: "cmd_docker_run": MetadataValue.path(cmd_list_to_str(cmd_docker_run)),
-            "dot_env": MetadataValue.md(f"```\n{lines}\n```"),
         },
     )
 

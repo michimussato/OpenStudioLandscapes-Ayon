@@ -171,9 +171,6 @@ The following variables are being declared in `OpenStudioLandscapes.Ayon.constan
 | Variable                      | Type   | Value                                                      |
 | :---------------------------- | :----- | :--------------------------------------------------------- |
 | `DOCKER_USE_CACHE`            | `bool` | `False`                                                    |
-| `HOSTNAME`                    | `str`  | `ayon`                                                     |
-| `TELEPORT_ENTRY_POINT_HOST`   | `str`  | `{{HOSTNAME}}`                                             |
-| `TELEPORT_ENTRY_POINT_PORT`   | `str`  | `{{AYON_PORT_HOST}}`                                       |
 | `CONFIGS_ROOT`                | `str`  | `{DOT_FEATURES}/OpenStudioLandscapes-Ayon/.payload/config` |
 | `AYON_PORT_HOST`              | `str`  | `5005`                                                     |
 | `AYON_PORT_CONTAINER`         | `str`  | `5000`                                                     |
