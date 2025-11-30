@@ -49,7 +49,6 @@ dev = [
     "OpenStudioLandscapes-Ayon[readme]",
     "OpenStudioLandscapes-Ayon[sbom]",
     "OpenStudioLandscapes-Ayon[testing]",
-    "dagster-webserver==1.9.11",
 ]
 graphviz = [
     "graphviz",
