@@ -81,7 +81,6 @@ feature_out = get_feature_out(
 def clone_repository(
     context: AssetExecutionContext,
     CONFIG: Config,  # pylint: disable=redefined-outer-name
-    repository_ayon: dict[str, str | None],
 ) -> Generator[Output[pathlib.Path] | AssetMaterialization, None, None]:
 
     env: dict = CONFIG.env
