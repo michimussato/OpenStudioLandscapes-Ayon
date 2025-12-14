@@ -464,6 +464,9 @@ def compose(
 def cmd_extend(
     context: AssetExecutionContext,
 ) -> Generator[Output[list[Any]] | AssetMaterialization | Any, Any, None]:
+    # Todo
+    #  - [ ] use `OpenStudioLandscapes.engine.base.ops.factories.factory_compose_scope__cmd`
+    #        instead
 
     ret = []
 
@@ -484,8 +487,11 @@ def cmd_extend(
 def cmd_append(
     context: AssetExecutionContext,
 ) -> Generator[Output[dict[str, list[Any]]] | AssetMaterialization | Any, Any, None]:
+    # Todo
+    #  - [ ] use `OpenStudioLandscapes.engine.base.ops.factories.factory_compose_scope__cmd`
+    #        instead
 
-    ret = {"cmd": [], "exclude_from_quote": []}
+    ret = {"cmd": [], "exclude_from_quote": ["$(which docker)"]}
 
     yield Output(ret)
 
