@@ -24,8 +24,8 @@ from git.exc import GitCommandError
 from OpenStudioLandscapes.engine.common_assets.docker_compose_graph import (
     get_docker_compose_graph,
 )
-from OpenStudioLandscapes.engine.common_assets.feature_out import get_feature_out
-from OpenStudioLandscapes.engine.common_assets.group_in import get_group_in
+from OpenStudioLandscapes.engine.common_assets.feature_out import get_feature_out, get_feature_out_v2
+from OpenStudioLandscapes.engine.common_assets.group_in import get_group_in, get_feature_in
 from OpenStudioLandscapes.engine.common_assets.group_out import get_group_out
 from OpenStudioLandscapes.engine.constants import *
 from OpenStudioLandscapes.engine.config.models import ConfigEngine
@@ -66,10 +66,18 @@ CONFIG = get_feature__CONFIG(
 )
 
 
+# Deprecated
 group_in = get_group_in(
     ASSET_HEADER=ASSET_HEADER,
     ASSET_HEADER_PARENT=ASSET_HEADER_BASE,
     input_name=str(GroupIn.BASE_IN),
+)
+
+
+feature_in = get_feature_in(
+    ASSET_HEADER=ASSET_HEADER,
+    ASSET_HEADER_BASE=ASSET_HEADER_BASE,
+    ASSET_HEADER_FEATURE_IN={},
 )
 
 
@@ -83,6 +91,7 @@ docker_compose_graph = get_docker_compose_graph(
 )
 
 
+# Deprecated
 feature_out = get_feature_out(
     ASSET_HEADER=ASSET_HEADER,
     feature_out_ins={
@@ -90,6 +99,11 @@ feature_out = get_feature_out(
         "group_in": dict,
         "CONFIG": discovery.FeatureBaseModel,
     },
+)
+
+
+feature_out_v2 = get_feature_out_v2(
+    ASSET_HEADER=ASSET_HEADER,
 )
 
 
