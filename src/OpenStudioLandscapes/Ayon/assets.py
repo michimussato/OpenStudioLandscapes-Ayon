@@ -3,9 +3,7 @@ import enum
 import pathlib
 from collections import ChainMap
 from functools import reduce
-from typing import Generator, List, MutableMapping
-
-# import OpenStudioLandscapes.engine.discovery.discovery as discovery
+from typing import Generator, List, MutableMapping, Union
 
 import git
 import yaml
@@ -16,7 +14,7 @@ from dagster import (
     AssetMaterialization,
     MetadataValue,
     Output,
-    asset,
+    asset, AssetsDefinition,
 )
 from docker_compose_graph.utils import *
 from docker_compose_graph.yaml_tags.overrides import *
@@ -24,8 +22,8 @@ from git.exc import GitCommandError
 from OpenStudioLandscapes.engine.common_assets.docker_compose_graph import (
     get_docker_compose_graph,
 )
-from OpenStudioLandscapes.engine.common_assets.feature_out import get_feature_out, get_feature_out_v2
-from OpenStudioLandscapes.engine.common_assets.group_in import get_group_in, get_feature_in
+from OpenStudioLandscapes.engine.common_assets.feature_out import get_feature_out_v2
+from OpenStudioLandscapes.engine.common_assets.group_in import get_feature_in, get_feature_in_parent
 from OpenStudioLandscapes.engine.common_assets.group_out import get_group_out
 from OpenStudioLandscapes.engine.constants import *
 from OpenStudioLandscapes.engine.config.models import ConfigEngine
@@ -53,38 +51,47 @@ yaml.SafeDumper.add_multi_representer(
 )
 
 
-compose_scope_group__cmd = get_compose_scope_group__cmd(
+compose_scope_group__cmd: AssetsDefinition = get_compose_scope_group__cmd(
     ASSET_HEADER=ASSET_HEADER,
 )
 
 
-CONFIG = get_feature__CONFIG(
+CONFIG: AssetsDefinition = get_feature__CONFIG(
     ASSET_HEADER=ASSET_HEADER,
     CONFIG_STR=CONFIG_STR,
     search_model_of_type=Config,
-    # config_parent=None,
 )
 
 
-feature_in = get_feature_in(
+feature_in: AssetsDefinition = get_feature_in(
     ASSET_HEADER=ASSET_HEADER,
     ASSET_HEADER_BASE=ASSET_HEADER_BASE,
     ASSET_HEADER_FEATURE_IN={},
 )
 
 
-group_out = get_group_out(
+group_out: AssetsDefinition = get_group_out(
     ASSET_HEADER=ASSET_HEADER,
 )
 
 
-docker_compose_graph = get_docker_compose_graph(
+docker_compose_graph: AssetsDefinition = get_docker_compose_graph(
     ASSET_HEADER=ASSET_HEADER,
 )
 
 
-feature_out_v2 = get_feature_out_v2(
+feature_out_v2: AssetsDefinition = get_feature_out_v2(
     ASSET_HEADER=ASSET_HEADER,
+)
+
+
+# Produces
+# - feature_in_parent
+# - CONFIG_PARENT
+# if ConfigParent is or type FeatureBaseModel
+feature_in_parent: Union[AssetsDefinition, None] = get_feature_in_parent(
+    ASSET_HEADER=ASSET_HEADER,
+    config_parent=ConfigParent,
 )
 
 
