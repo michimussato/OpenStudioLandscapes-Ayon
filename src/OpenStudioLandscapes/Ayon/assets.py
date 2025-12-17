@@ -153,7 +153,7 @@ def clone_repository(
 )
 def compose_networks(
     context: AssetExecutionContext,
-    CONFIG: Config,
+    CONFIG: Config,  # pylint: disable=redefined-outer-name
 ) -> Generator[
     Output[Dict[str, Dict[str, Dict[str, str]]]]
     | AssetMaterialization,
