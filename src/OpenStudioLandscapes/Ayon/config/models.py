@@ -28,6 +28,7 @@ class Config(FeatureBaseModel):
             "{DOT_LANDSCAPES}/{LANDSCAPE}/{FEATURE}/docker_compose/docker-compose.override.yml"
         ),
         description="The path to the `docker-compose.yml` file.",
+        frozen=True,
     )
 
     ayon_port_container: PositiveInt = Field(
@@ -41,7 +42,8 @@ class Config(FeatureBaseModel):
         frozen=False,
     )
     ayon_db_install_destination: pathlib.Path = Field(
-        description="The host side Ayon database installation destination."
+        description="The host side Ayon database installation destination.",
+        default=pathlib.Path("{DOT_LANDSCAPES}/{LANDSCAPE}/{FEATURE}/data/ayon-db")
     )
     # Todo:
     #  - [ ] Implement?

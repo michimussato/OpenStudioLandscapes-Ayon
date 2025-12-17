@@ -6,10 +6,10 @@ key_prefixes:
 compose_scope: "default"
 
 # ayon_port_container: 5000
-ayon_port_host: 5005
+#ayon_port_host: 5005
 
 # Inside Landscape (ephemeral):
-ayon_db_install_destination: "{DOT_LANDSCAPES}/{LANDSCAPE}/{FEATURE}/data/ayon-db"
+#ayon_db_install_destination: "{DOT_LANDSCAPES}/{LANDSCAPE}/{FEATURE}/data/ayon-db"
 # In Landscapes root:
 # Todo:
 #  - [ ] does {DOT_SHARED_VOLUMES}/{GROUP}__{KEY} actually resolve? I don't think so...
