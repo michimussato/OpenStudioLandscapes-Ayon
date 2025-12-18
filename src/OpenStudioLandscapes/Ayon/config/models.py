@@ -1,3 +1,4 @@
+import enum
 import pathlib
 
 from dagster import get_dagster_logger
@@ -15,6 +16,10 @@ from OpenStudioLandscapes.Ayon import dist
 
 config_default = pathlib.Path(__file__).parent.joinpath("config_default.yml")
 CONFIG_STR = config_default.read_text()
+
+
+class Branches(enum.StrEnum):
+    main = "main"
 
 
 class Config(FeatureBaseModel):
@@ -69,8 +74,11 @@ class Config(FeatureBaseModel):
     repository_url: HttpUrl = Field(
         default="https://github.com/ynput/ayon-docker.git",
     )
-    repository_branch: str = Field(
-        default="main",
+    repository_branch: Branches = Field(
+        default=Branches.main,
+        description="The branch of the Ayon repository.",
+        frozen=True,
+        examples=[i.name for i in Branches]
     )
     repository_subdir: str = Field(
         default="ayon-docker",
