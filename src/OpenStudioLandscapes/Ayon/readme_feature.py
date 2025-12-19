@@ -114,8 +114,6 @@ def readme_feature(doc: snakemd.Document) -> snakemd.Document:
         ]
     )
 
-    doc.add_horizontal_rule()
-
     return doc
 
 
