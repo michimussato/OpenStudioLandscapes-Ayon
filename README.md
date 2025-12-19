@@ -5,7 +5,7 @@
 1. [Feature: OpenStudioLandscapes-Ayon](#feature-openstudiolandscapes-ayon)
    1. [Brief](#brief)
    2. [Configuration](#configuration)
-2. [Official Resources](#official-resources)
+2. [External Resources](#external-resources)
    1. [Official Documentation](#official-documentation)
       1. [Dev Resources](#dev-resources)
 3. [Community](#community)
@@ -88,7 +88,7 @@ key_prefixes:
 
 ***
 
-# Official Resources
+# External Resources
 
 [![Logo Ayon ](https://ynput.io/wp-content/uploads/2023/04/ayon-whiteg-dot.svg)](https://ynput.io/ayon/)
 
@@ -243,4 +243,4 @@ Currently, the following Python interpreters are enabled for testing:
 
 ***
 
-Last changed: **2025-12-19 16:47:49 UTC**
+Last changed: **2025-12-19 21:11:29 UTC**
