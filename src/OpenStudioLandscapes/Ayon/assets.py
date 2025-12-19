@@ -189,22 +189,22 @@ def compose_networks(
 @asset(
     **ASSET_HEADER,
     ins={
+        "CONFIG": AssetIn(
+            AssetKey([*ASSET_HEADER["key_prefix"], "CONFIG"]),
+        ),
         "compose_networks": AssetIn(
             AssetKey([*ASSET_HEADER["key_prefix"], "compose_networks"]),
         ),
         "clone_repository": AssetIn(
             AssetKey([*ASSET_HEADER["key_prefix"], "clone_repository"]),
         ),
-        "CONFIG": AssetIn(
-            AssetKey([*ASSET_HEADER["key_prefix"], "CONFIG"]),
-        ),
     },
 )
 def compose(
     context: AssetExecutionContext,
+    CONFIG: Config,  # pylint: disable=redefined-outer-name
     compose_networks: Dict,  # pylint: disable=redefined-outer-name
     clone_repository: pathlib.Path,  # pylint: disable=redefined-outer-name
-    CONFIG: Config,  # pylint: disable=redefined-outer-name
 ) -> Generator[
     Output[Dict[str, List[Dict[str, List[str]]]]]
     | AssetMaterialization,
@@ -216,6 +216,7 @@ def compose(
     Other non-standard examples:
         - `OpenStudioLandscapes.Ayon.assets.compose`
         - `OpenStudioLandscapes.VERT.assets.compose`
+        - `OpenStudioLandscapes.OpenCue.assets.compose`
 
     Args:
         context:
