@@ -48,7 +48,7 @@ class Config(FeatureBaseModel):
     )
     ayon_db_install_destination: pathlib.Path = Field(
         description="The host side Ayon database installation destination.",
-        default=pathlib.Path("{DOT_LANDSCAPES}/{LANDSCAPE}/{FEATURE}/data/ayon-db")
+        default=pathlib.Path("{DOT_LANDSCAPES}/{LANDSCAPE}/{FEATURE}/data/ayon-db"),
     )
     # Todo:
     #  - [ ] Implement?
@@ -78,7 +78,7 @@ class Config(FeatureBaseModel):
         default=Branches.main,
         description="The branch of the Ayon repository.",
         frozen=True,
-        examples=[i.name for i in Branches]
+        examples=[i.name for i in Branches],
     )
     repository_subdir: str = Field(
         default="ayon-docker",

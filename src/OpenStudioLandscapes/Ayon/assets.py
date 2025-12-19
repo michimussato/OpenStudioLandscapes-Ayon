@@ -3,7 +3,7 @@ import enum
 import pathlib
 from collections import ChainMap
 from functools import reduce
-from typing import Generator, List, Dict, Union
+from typing import Dict, Generator, List, Union
 
 import git
 import yaml
@@ -12,21 +12,29 @@ from dagster import (
     AssetIn,
     AssetKey,
     AssetMaterialization,
+    AssetsDefinition,
     MetadataValue,
     Output,
-    asset, AssetsDefinition,
+    asset,
 )
 from docker_compose_graph.utils import *
 from docker_compose_graph.yaml_tags.overrides import *
 from git.exc import GitCommandError
+from OpenStudioLandscapes.engine.common_assets.compose_scope import (
+    get_compose_scope_group__cmd,
+)
 from OpenStudioLandscapes.engine.common_assets.docker_compose_graph import (
     get_docker_compose_graph,
 )
+from OpenStudioLandscapes.engine.common_assets.feature import get_feature__CONFIG
 from OpenStudioLandscapes.engine.common_assets.feature_out import get_feature_out_v2
-from OpenStudioLandscapes.engine.common_assets.group_in import get_feature_in, get_feature_in_parent
+from OpenStudioLandscapes.engine.common_assets.group_in import (
+    get_feature_in,
+    get_feature_in_parent,
+)
 from OpenStudioLandscapes.engine.common_assets.group_out import get_group_out
-from OpenStudioLandscapes.engine.constants import *
 from OpenStudioLandscapes.engine.config.models import ConfigEngine
+from OpenStudioLandscapes.engine.constants import *
 from OpenStudioLandscapes.engine.enums import *
 from OpenStudioLandscapes.engine.utils import *
 from OpenStudioLandscapes.engine.utils.docker.compose_dicts import *
@@ -34,14 +42,6 @@ from OpenStudioLandscapes.engine.utils.docker.compose_dicts import *
 from OpenStudioLandscapes.Ayon import dist
 from OpenStudioLandscapes.Ayon.config.models import CONFIG_STR, Config
 from OpenStudioLandscapes.Ayon.constants import *
-
-from OpenStudioLandscapes.engine.common_assets.compose_scope import (
-get_compose_scope_group__cmd,
-)
-
-from OpenStudioLandscapes.engine.common_assets.feature import (
-get_feature__CONFIG
-)
 
 # https://github.com/yaml/pyyaml/issues/722#issuecomment-1969292770
 yaml.SafeDumper.add_multi_representer(
@@ -154,8 +154,7 @@ def compose_networks(
     context: AssetExecutionContext,
     CONFIG: Config,  # pylint: disable=redefined-outer-name
 ) -> Generator[
-    Output[Dict[str, Dict[str, Dict[str, str]]]]
-    | AssetMaterialization,
+    Output[Dict[str, Dict[str, Dict[str, str]]]] | AssetMaterialization,
     None,
     None,
 ]:
@@ -206,8 +205,7 @@ def compose(
     compose_networks: Dict,  # pylint: disable=redefined-outer-name
     clone_repository: pathlib.Path,  # pylint: disable=redefined-outer-name
 ) -> Generator[
-    Output[Dict[str, List[Dict[str, List[str]]]]]
-    | AssetMaterialization,
+    Output[Dict[str, List[Dict[str, List[str]]]]] | AssetMaterialization,
     None,
     None,
 ]:
