@@ -384,9 +384,6 @@ docker_compose_yml: docker-compose.yml
 # Examples:
 #     None
 docker_compose_worker_yml: docker-compose.worker.yml
-
-
-
 ```
 
 ***
@@ -546,4 +543,4 @@ Currently, the following Python interpreters are enabled for testing:
 
 ***
 
-Last changed: **2025-12-23 13:34:56 UTC**
+Last changed: **2025-12-23 13:37:16 UTC**
