@@ -59,31 +59,236 @@ A local config store location will be created if it doesn't exist, together with
 The following settings are available in `OpenStudioLandscapes-Ayon` and are accessible throughout the [`OpenStudioLandscapes-Ayon`](https://github.com/michimussato/OpenStudioLandscapes-Ayon/tree/main/OpenStudioLandscapes/Ayon/config/models.py) package.
 
 ```yaml
-# Base Information
-group_name: "OpenStudioLandscapes_Ayon"
-key_prefixes:
-  - "OpenStudioLandscapes_Ayon"
+# ===
+# env
+# ---
+#
+# Type: typing.Dict
+# Base Class:
+#     Description:
+#         None
+#     Default value:
+#         None
 
-#compose_scope: "default"
 
-#enabled: true
+# =============
+# config_engine
+# -------------
+#
+# Type: <class 'OpenStudioLandscapes.engine.config.models.ConfigEngine'>
+# Base Class:
+#     Description:
+#         None
+#     Default value:
+#         None
 
-#docker_compose_override: "{DOT_LANDSCAPES}/{LANDSCAPE}/{FEATURE}/docker_compose/docker-compose.override.yml"
 
-#ayon_port_container: 5000
-#ayon_port_host: 5005
+# =============
+# config_parent
+# -------------
+#
+# Type: <class 'OpenStudioLandscapes.engine.config.models.FeatureBaseModel'>
+# Base Class:
+#     Description:
+#         None
+#     Default value:
+#         None
 
-# Inside Landscape (ephemeral):
-#ayon_db_install_destination: "{DOT_LANDSCAPES}/{LANDSCAPE}/{FEATURE}/data/ayon-db"
-# In Landscapes root:
-# Todo:
-#  - [ ] does {DOT_SHARED_VOLUMES}/{GROUP}__{KEY} actually resolve? I don't think so...
-#ayon_db_install_destination: "{DOT_LANDSCAPES}/{DOT_SHARED_VOLUMES}/{GROUP}__{KEY}/data/ayon-db"
 
-#repository_url: "https://github.com/ynput/ayon-docker.git"
-#branch: "main"
-#docker_compose_yml: "docker-compose.yml"
-#docker_compose_worker_yml: "docker-compose.worker.yml"
+# ============
+# distribution
+# ------------
+#
+# Type: <class 'importlib.metadata.Distribution'>
+# Base Class:
+#     Description:
+#         None
+#     Default value:
+#         None
+
+
+# ==========
+# group_name
+# ----------
+#
+# Type: <class 'str'>
+# Base Class:
+#     Description:
+#         None
+#     Default value:
+#         None
+
+
+# ============
+# key_prefixes
+# ------------
+#
+# Type: typing.List[str]
+# Base Class:
+#     Description:
+#         None
+#     Default value:
+#         None
+
+
+# =======
+# enabled
+# -------
+#
+# Type: <class 'bool'>
+# Base Class:
+#     Description:
+#         Whether the Feature is enabled or not.
+#     Default value:
+#         True
+
+
+# =============
+# compose_scope
+# -------------
+#
+# Type: <class 'str'>
+# Base Class:
+#     Description:
+#         None
+#     Default value:
+#         default
+
+
+# ============
+# feature_name
+# ------------
+#
+# Type: <class 'str'>
+# Base Class:
+#     Description:
+#         The name of the feature. It is derived from the `OpenStudioLandscapes.<Feature>.dist` attribute.
+#     Default value:
+#         PydanticUndefined
+feature_name: OpenStudioLandscapes-Ayon
+
+
+# ==============
+# docker_compose
+# --------------
+#
+# Type: <class 'pathlib.Path'>
+# Base Class:
+#     Description:
+#         The path to the `docker-compose.yml` file.
+#     Default value:
+#         {DOT_LANDSCAPES}/{LANDSCAPE}/{FEATURE}/docker_compose/docker-compose.yml
+
+
+# =======================
+# docker_compose_override
+# -----------------------
+#
+# Type: <class 'pathlib.Path'>
+# Sub Class Description:
+#     The path to the `docker-compose.yml` file.
+# Examples:
+#     None
+docker_compose_override: '{DOT_LANDSCAPES}/{LANDSCAPE}/{FEATURE}/docker_compose/docker-compose.override.yml'
+
+
+# ===================
+# ayon_port_container
+# -------------------
+#
+# Type: <class 'int'>
+# Sub Class Description:
+#     The Ayon container port.
+# Examples:
+#     None
+ayon_port_container: 5000
+
+
+# ==============
+# ayon_port_host
+# --------------
+#
+# Type: <class 'int'>
+# Sub Class Description:
+#     The Ayon host port.
+# Examples:
+#     None
+ayon_port_host: 5005
+
+
+# ===========================
+# ayon_db_install_destination
+# ---------------------------
+#
+# Type: <class 'pathlib.Path'>
+# Sub Class Description:
+#     The host side Ayon database installation destination.
+# Examples:
+#     None
+ayon_db_install_destination: '{DOT_LANDSCAPES}/{LANDSCAPE}/{FEATURE}/data/ayon-db'
+
+
+# ==============
+# repository_url
+# --------------
+#
+# Type: <class 'pydantic.networks.HttpUrl'>
+# Sub Class Description:
+#     None
+# Examples:
+#     None
+repository_url: https://github.com/ynput/ayon-docker.git
+
+
+# =================
+# repository_branch
+# -----------------
+#
+# Type: <enum 'Branches'>
+# Sub Class Description:
+#     The branch of the Ayon repository.
+# Examples:
+#     ['main']
+repository_branch: main
+
+
+# =================
+# repository_subdir
+# -----------------
+#
+# Type: <class 'str'>
+# Sub Class Description:
+#     None
+# Examples:
+#     None
+repository_subdir: ayon-docker
+
+
+# ==================
+# docker_compose_yml
+# ------------------
+#
+# Type: <class 'str'>
+# Sub Class Description:
+#     None
+# Examples:
+#     None
+docker_compose_yml: docker-compose.yml
+
+
+# =========================
+# docker_compose_worker_yml
+# -------------------------
+#
+# Type: <class 'str'>
+# Sub Class Description:
+#     None
+# Examples:
+#     None
+docker_compose_worker_yml: docker-compose.worker.yml
+
+
+
 ```
 
 ***
@@ -243,4 +448,4 @@ Currently, the following Python interpreters are enabled for testing:
 
 ***
 
-Last changed: **2025-12-19 21:11:29 UTC**
+Last changed: **2025-12-23 12:26:12 UTC**
