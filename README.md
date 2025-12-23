@@ -65,10 +65,17 @@ The following settings are available in `OpenStudioLandscapes-Ayon` and are acce
 #
 # Type: typing.Dict
 # Base Class:
+#     Required: False
 #     Description:
 #         None
 #     Default value:
 #         None
+# Description:
+#     None
+# Required: False
+#     None
+# Examples:
+#     None
 
 
 # =============
@@ -77,10 +84,17 @@ The following settings are available in `OpenStudioLandscapes-Ayon` and are acce
 #
 # Type: <class 'OpenStudioLandscapes.engine.config.models.ConfigEngine'>
 # Base Class:
+#     Required: False
 #     Description:
 #         None
 #     Default value:
 #         None
+# Description:
+#     None
+# Required: False
+#     None
+# Examples:
+#     None
 
 
 # =============
@@ -89,10 +103,17 @@ The following settings are available in `OpenStudioLandscapes-Ayon` and are acce
 #
 # Type: <class 'OpenStudioLandscapes.engine.config.models.FeatureBaseModel'>
 # Base Class:
+#     Required: False
 #     Description:
 #         None
 #     Default value:
 #         None
+# Description:
+#     None
+# Required: False
+#     None
+# Examples:
+#     None
 
 
 # ============
@@ -101,10 +122,17 @@ The following settings are available in `OpenStudioLandscapes-Ayon` and are acce
 #
 # Type: <class 'importlib.metadata.Distribution'>
 # Base Class:
+#     Required: False
 #     Description:
 #         None
 #     Default value:
 #         None
+# Description:
+#     None
+# Required: False
+#     None
+# Examples:
+#     None
 
 
 # ==========
@@ -113,10 +141,17 @@ The following settings are available in `OpenStudioLandscapes-Ayon` and are acce
 #
 # Type: <class 'str'>
 # Base Class:
+#     Required: False
 #     Description:
 #         None
 #     Default value:
 #         None
+# Description:
+#     None
+# Required: False
+#     None
+# Examples:
+#     None
 
 
 # ============
@@ -125,10 +160,17 @@ The following settings are available in `OpenStudioLandscapes-Ayon` and are acce
 #
 # Type: typing.List[str]
 # Base Class:
+#     Required: False
 #     Description:
 #         None
 #     Default value:
 #         None
+# Description:
+#     None
+# Required: False
+#     None
+# Examples:
+#     None
 
 
 # =======
@@ -137,10 +179,17 @@ The following settings are available in `OpenStudioLandscapes-Ayon` and are acce
 #
 # Type: <class 'bool'>
 # Base Class:
+#     Required: False
 #     Description:
 #         Whether the Feature is enabled or not.
 #     Default value:
 #         True
+# Description:
+#     Whether the Feature is enabled or not.
+# Required: False
+#     Whether the Feature is enabled or not.
+# Examples:
+#     None
 
 
 # =============
@@ -149,10 +198,17 @@ The following settings are available in `OpenStudioLandscapes-Ayon` and are acce
 #
 # Type: <class 'str'>
 # Base Class:
+#     Required: False
 #     Description:
 #         None
 #     Default value:
 #         default
+# Description:
+#     None
+# Required: False
+#     None
+# Examples:
+#     ['default', 'license_server', 'worker']
 
 
 # ============
@@ -161,10 +217,17 @@ The following settings are available in `OpenStudioLandscapes-Ayon` and are acce
 #
 # Type: <class 'str'>
 # Base Class:
+#     Required: True
 #     Description:
 #         The name of the feature. It is derived from the `OpenStudioLandscapes.<Feature>.dist` attribute.
 #     Default value:
 #         PydanticUndefined
+# Description:
+#     None
+# Required: False
+#     None
+# Examples:
+#     None
 feature_name: OpenStudioLandscapes-Ayon
 
 
@@ -174,10 +237,17 @@ feature_name: OpenStudioLandscapes-Ayon
 #
 # Type: <class 'pathlib.Path'>
 # Base Class:
+#     Required: False
 #     Description:
 #         The path to the `docker-compose.yml` file.
 #     Default value:
 #         {DOT_LANDSCAPES}/{LANDSCAPE}/{FEATURE}/docker_compose/docker-compose.yml
+# Description:
+#     The path to the `docker-compose.yml` file.
+# Required: False
+#     The path to the `docker-compose.yml` file.
+# Examples:
+#     None
 
 
 # =======================
@@ -185,7 +255,9 @@ feature_name: OpenStudioLandscapes-Ayon
 # -----------------------
 #
 # Type: <class 'pathlib.Path'>
-# Sub Class Description:
+# Description:
+#     The path to the `docker-compose.yml` file.
+# Required: False
 #     The path to the `docker-compose.yml` file.
 # Examples:
 #     None
@@ -197,7 +269,9 @@ docker_compose_override: '{DOT_LANDSCAPES}/{LANDSCAPE}/{FEATURE}/docker_compose/
 # -------------------
 #
 # Type: <class 'int'>
-# Sub Class Description:
+# Description:
+#     The Ayon container port.
+# Required: False
 #     The Ayon container port.
 # Examples:
 #     None
@@ -209,7 +283,9 @@ ayon_port_container: 5000
 # --------------
 #
 # Type: <class 'int'>
-# Sub Class Description:
+# Description:
+#     The Ayon host port.
+# Required: False
 #     The Ayon host port.
 # Examples:
 #     None
@@ -221,7 +297,9 @@ ayon_port_host: 5005
 # ---------------------------
 #
 # Type: <class 'pathlib.Path'>
-# Sub Class Description:
+# Description:
+#     The host side Ayon database installation destination.
+# Required: False
 #     The host side Ayon database installation destination.
 # Examples:
 #     None
@@ -233,7 +311,9 @@ ayon_db_install_destination: '{DOT_LANDSCAPES}/{LANDSCAPE}/{FEATURE}/data/ayon-d
 # --------------
 #
 # Type: <class 'pydantic.networks.HttpUrl'>
-# Sub Class Description:
+# Description:
+#     None
+# Required: False
 #     None
 # Examples:
 #     None
@@ -245,7 +325,9 @@ repository_url: https://github.com/ynput/ayon-docker.git
 # -----------------
 #
 # Type: <enum 'Branches'>
-# Sub Class Description:
+# Description:
+#     The branch of the Ayon repository.
+# Required: False
 #     The branch of the Ayon repository.
 # Examples:
 #     ['main']
@@ -257,7 +339,9 @@ repository_branch: main
 # -----------------
 #
 # Type: <class 'str'>
-# Sub Class Description:
+# Description:
+#     None
+# Required: False
 #     None
 # Examples:
 #     None
@@ -269,7 +353,9 @@ repository_subdir: ayon-docker
 # ------------------
 #
 # Type: <class 'str'>
-# Sub Class Description:
+# Description:
+#     None
+# Required: False
 #     None
 # Examples:
 #     None
@@ -281,7 +367,9 @@ docker_compose_yml: docker-compose.yml
 # -------------------------
 #
 # Type: <class 'str'>
-# Sub Class Description:
+# Description:
+#     None
+# Required: False
 #     None
 # Examples:
 #     None
@@ -448,4 +536,4 @@ Currently, the following Python interpreters are enabled for testing:
 
 ***
 
-Last changed: **2025-12-23 12:26:12 UTC**
+Last changed: **2025-12-23 12:48:32 UTC**
