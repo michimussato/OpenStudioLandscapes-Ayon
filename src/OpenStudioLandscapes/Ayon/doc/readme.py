@@ -19,11 +19,9 @@ def readme_feature(
 
     doc.add_paragraph(
         snakemd.Inline(
-            text=textwrap.dedent(
-                """\
+            text=textwrap.dedent("""\
                 Logo Ayon\
-                """
-            ),
+                """),
             image={
                 "Ayon": "https://ynput.io/wp-content/uploads/2023/04/ayon-whiteg-dot.svg",
             }["Ayon"],
@@ -31,24 +29,18 @@ def readme_feature(
         ).__str__()
     )
 
-    doc.add_paragraph(
-        text=textwrap.dedent(
-            """\
+    doc.add_paragraph(text=textwrap.dedent("""\
             Ayon is written and maintained by Ynput, a company based
             in Czech Republic:\
-            """
-        )
-    )
+            """))
 
     # Logo
 
     doc.add_paragraph(
         snakemd.Inline(
-            text=textwrap.dedent(
-                """\
+            text=textwrap.dedent("""\
                 Logo Ynput\
-                """
-            ),
+                """),
             image={
                 "Ynput": "https://ynput.io/wp-content/uploads/2022/09/ynput-logo-small-bg.svg",
             }["Ynput"],
@@ -56,13 +48,9 @@ def readme_feature(
         ).__str__()
     )
 
-    doc.add_paragraph(
-        text=textwrap.dedent(
-            """\
+    doc.add_paragraph(text=textwrap.dedent("""\
             Ynput offers different versions of Ayon\
-            """
-        )
-    )
+            """))
 
     doc.add_unordered_list(
         [
@@ -72,14 +60,10 @@ def readme_feature(
         ]
     )
 
-    doc.add_paragraph(
-        text=textwrap.dedent(
-            """\
+    doc.add_paragraph(text=textwrap.dedent("""\
             `OpenStudioLandscapes-Ayon` is based on the [Community](https://ynput.io/ayon/pricing/)
             version provided by their own Docker image:\
-            """
-        )
-    )
+            """))
 
     doc.add_unordered_list(
         [

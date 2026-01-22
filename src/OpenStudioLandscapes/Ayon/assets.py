@@ -20,6 +20,8 @@ from dagster import (
 from docker_compose_graph.utils import *
 from docker_compose_graph.yaml_tags.overrides import *
 from git.exc import GitCommandError
+from OpenStudioLandscapes.engine.common_assets.cmd import get_feature__cmd
+
 # from OpenStudioLandscapes.engine.common_assets.compose_scope import (
 #     get_compose_scope_group__cmd,
 # )
@@ -27,7 +29,6 @@ from OpenStudioLandscapes.engine.common_assets.docker_compose_graph import (
     get_docker_compose_graph,
 )
 from OpenStudioLandscapes.engine.common_assets.feature import get_feature__CONFIG
-from OpenStudioLandscapes.engine.common_assets.cmd import get_feature__cmd
 from OpenStudioLandscapes.engine.common_assets.feature_out import get_feature_out_v2
 from OpenStudioLandscapes.engine.common_assets.group_in import (
     get_feature_in,
