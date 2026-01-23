@@ -2,17 +2,21 @@ project:
   description: Ayon Feature for OpenStudioLandscapes
   name: OpenStudioLandscapes-Ayon
   optional-dependencies:
+    optional-base:
+    - OpenStudioLandscapes @ git+https://github.com/michimussato/OpenStudioLandscapes.git
     dev:
-    - OpenStudioLandscapes-Ayon[testing]
     - OpenStudioLandscapes-Ayon[lint]
-    - OpenStudioLandscapes-Ayon[nox]
     - OpenStudioLandscapes-Ayon[sbom]
-    - OpenStudioLandscapes-Ayon[coverage]
     - OpenStudioLandscapes-Ayon[readme]
-    nox:
-    - OpenStudioLandscapes-Ayon[testing]
+    lint:
+    - OpenStudioLandscapes-Ayon[optional-base]
+    readme:
+    - OpenStudioLandscapes-Ayon[optional-base]
+    pyproject:
+    - OpenStudioLandscapes-Ayon[optional-base]
     sbom:
     - OpenStudioLandscapes-Ayon[graphviz]
+    - OpenStudioLandscapes-Ayon[optional-base]
   urls:
     Homepage: https://github.com/michimussato/OpenStudioLandscapes-Ayon
 tool:
