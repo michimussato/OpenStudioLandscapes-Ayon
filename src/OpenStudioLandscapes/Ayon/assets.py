@@ -297,10 +297,13 @@ def compose(
         )
 
     volumes_dict = {
-        "volumes": [
-            "/etc/localtime:/etc/localtime:ro",
-            *_volume_relative,
-        ]
+        "volumes": list(
+            {
+                "/etc/localtime:/etc/localtime:ro",
+                *_volume_relative,
+                *config_engine.global_bind_volumes,
+            }
+        )
     }
 
     service_name_postgres = "postgres"
@@ -335,12 +338,18 @@ def compose(
                 "domainname": config_engine.openstudiolandscapes__domain_lan,
                 **copy.deepcopy(volumes_dict),
                 **copy.deepcopy(network_dict),
+                "environment": {
+                    **config_engine.global_environment_variables,
+                },
             },
             service_name_redis: {
                 "container_name": container_name_redis,
                 "hostname": host_name_redis,
                 "domainname": config_engine.openstudiolandscapes__domain_lan,
                 **copy.deepcopy(network_dict),
+                "environment": {
+                    **config_engine.global_environment_variables,
+                },
             },
             service_name_server: {
                 "container_name": container_name_server,
@@ -351,6 +360,9 @@ def compose(
                 #  - [ ] Need to find out whether `ports` Override
                 #  also overrides the exports in the source ayon-docker-compose.yml
                 #  "exports": OverrideArray([]),
+                "environment": {
+                    **config_engine.global_environment_variables,
+                },
                 **copy.deepcopy(network_dict),
                 **copy.deepcopy(ports_dict),
             },
