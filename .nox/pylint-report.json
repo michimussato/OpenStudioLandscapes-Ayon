@@ -559,19 +559,6 @@
         "message-id": "C0116"
     },
     {
-        "type": "error",
-        "module": "OpenStudioLandscapes.Ayon.config.models",
-        "obj": "Config.docker_compose_override_expanded",
-        "line": 102,
-        "column": 12,
-        "endLine": 102,
-        "endColumn": 51,
-        "path": "src/OpenStudioLandscapes/Ayon/config/models.py",
-        "symbol": "no-member",
-        "message": "Instance of 'FieldInfo' has no 'expanduser' member",
-        "message-id": "E1101"
-    },
-    {
         "type": "convention",
         "module": "OpenStudioLandscapes.Ayon.config.models",
         "obj": "Config.ayon_db_install_destination_expanded",
@@ -583,19 +570,6 @@
         "symbol": "missing-function-docstring",
         "message": "Missing function or method docstring",
         "message-id": "C0116"
-    },
-    {
-        "type": "error",
-        "module": "OpenStudioLandscapes.Ayon.config.models",
-        "obj": "Config.ayon_db_install_destination_expanded",
-        "line": 121,
-        "column": 12,
-        "endLine": 121,
-        "endColumn": 55,
-        "path": "src/OpenStudioLandscapes/Ayon/config/models.py",
-        "symbol": "no-member",
-        "message": "Instance of 'FieldInfo' has no 'expanduser' member",
-        "message-id": "E1101"
     },
     {
         "type": "convention",
