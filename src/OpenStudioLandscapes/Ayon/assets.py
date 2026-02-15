@@ -364,7 +364,7 @@ def compose(
                 #  also overrides the exports in the source ayon-docker-compose.yml
                 #  "exports": OverrideArray([]),
                 "environment": {
-                    "TZ": CONFIG.tz,
+                    "TZ": config_engine.tz,
                     **config_engine.global_environment_variables,
                     **CONFIG.local_environment_variables,
                 },
