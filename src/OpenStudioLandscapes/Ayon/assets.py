@@ -340,7 +340,7 @@ def compose(
                 **copy.deepcopy(volumes_dict),
                 **copy.deepcopy(network_dict),
                 "environment": {
-                    "TZ": CONFIG.tz,
+                    "TZ": config_engine.tz,
                     **config_engine.global_environment_variables,
                 },
             },
@@ -350,7 +350,7 @@ def compose(
                 "domainname": config_engine.openstudiolandscapes__domain_lan,
                 **copy.deepcopy(network_dict),
                 "environment": {
-                    "TZ": CONFIG.tz,
+                    "TZ": config_engine.tz,
                     **config_engine.global_environment_variables,
                 },
             },
