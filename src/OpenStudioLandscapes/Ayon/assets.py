@@ -340,6 +340,7 @@ def compose(
                 **copy.deepcopy(volumes_dict),
                 **copy.deepcopy(network_dict),
                 "environment": {
+                    "TZ": CONFIG.tz,
                     **config_engine.global_environment_variables,
                 },
             },
@@ -349,6 +350,7 @@ def compose(
                 "domainname": config_engine.openstudiolandscapes__domain_lan,
                 **copy.deepcopy(network_dict),
                 "environment": {
+                    "TZ": CONFIG.tz,
                     **config_engine.global_environment_variables,
                 },
             },
@@ -362,6 +364,7 @@ def compose(
                 #  also overrides the exports in the source ayon-docker-compose.yml
                 #  "exports": OverrideArray([]),
                 "environment": {
+                    "TZ": CONFIG.tz,
                     **config_engine.global_environment_variables,
                     **CONFIG.local_environment_variables,
                 },
