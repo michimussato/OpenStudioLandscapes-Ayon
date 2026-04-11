@@ -8,7 +8,7 @@
       1. [Clone and Install](#clone-and-install)
    3. [Configure](#configure)
       1. [Default Configuration](#default-configuration)
-   4. [Local Development](#local-development)
+   4. [Local Development/Unit Testing/Debugging](#local-developmentunit-testingdebugging)
 2. [External Resources](#external-resources)
    1. [Official Documentation](#official-documentation)
       1. [Dev Resources](#dev-resources)
@@ -74,7 +74,7 @@ A local config store location will be created if it doesn't exist, together with
 > controlled repository. This makes it easy to track changes
 > you made to the `config.yml`.
 
-The following settings are available in `OpenStudioLandscapes-Ayon` and are based on [`OpenStudioLandscapes-Ayon/tree/main/OpenStudioLandscapes/Ayon/config/models.py`](https://github.com/michimussato/OpenStudioLandscapes-Ayon/tree/main/OpenStudioLandscapes/Ayon/config/models.py).
+The following settings are available in `OpenStudioLandscapes-Ayon` and are based on [`OpenStudioLandscapes-Ayon/tree/main/src/OpenStudioLandscapes/Ayon/config/models.py`](https://github.com/michimussato/OpenStudioLandscapes-Ayon/tree/main/src/OpenStudioLandscapes/Ayon/config/models.py).
 
 ### Default Configuration
 
@@ -436,10 +436,12 @@ docker_compose_worker_yml: docker-compose.worker.yml
 </details>
 
 
-## Local Development
+## Local Development/Unit Testing/Debugging
+
+This is for isolated development, unit testing and debugging. Instead of the [`OpenStudioLandscapes-Ayon/tree/main/src/OpenStudioLandscapes/Ayon/definitions.py`](https://github.com/michimussato/OpenStudioLandscapes-Ayon/tree/main/src/OpenStudioLandscapes/Ayon/definitions.py), the accompanying [`OpenStudioLandscapes-Ayon/tree/main/workspace.yaml`](https://github.com/michimussato/OpenStudioLandscapes-Ayon/tree/main/workspace.yaml) loads the [`OpenStudioLandscapes-Ayon/tree/main/src/OpenStudioLandscapes/Ayon/_definitions_with_upstream_specs.py`](https://github.com/michimussato/OpenStudioLandscapes-Ayon/tree/main/src/OpenStudioLandscapes/Ayon/_definitions_with_upstream_specs.py) which also contains [`AssetSpec`](https://release-1-9-13.archive.dagster-docs.io/api/dagster/assets#dagster.AssetSpec) definitions for upstream dependencies as [external assets](https://release-1-9-13.archive.dagster-docs.io/guides/build/assets/external-assets).
 
 ```shell
-cd ./.features/OpenStudioLandscapes-Ayon
+# cd ./.features/OpenStudioLandscapes-Ayon
 python3.11 -m venv .venv
 source .venv/bin/activate
 pip install --upgrade pip setuptools setuptools_scm wheel
@@ -515,4 +517,4 @@ To follow up on the previous LinkedIn publications, visit:
 
 ***
 
-Last changed: **2026-04-11 01:59:00 UTC**
+Last changed: **2026-04-11 11:21:41 UTC**
