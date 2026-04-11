@@ -2,5 +2,5 @@
 
 load_from:
   - python_module:
-      module_name: "OpenStudioLandscapes.Ayon.definitions"
+      module_name: "OpenStudioLandscapes.Ayon._definitions_with_upstream_specs"
       location_name: "OpenStudioLandscapes-Ayon"
