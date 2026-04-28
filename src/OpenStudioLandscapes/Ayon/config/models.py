@@ -7,7 +7,6 @@ from pydantic import (
     Field,
     HttpUrl,
     PositiveInt,
-    # computed_field,
 )
 
 LOGGER = get_dagster_logger(__name__)
@@ -92,7 +91,6 @@ class Config(FeatureBaseModel):
     )
 
     # EXPANDABLE PATHS
-    # @computed_field
     @property
     def docker_compose_override_expanded(self) -> pathlib.Path:
         LOGGER.debug(f"{self.env = }")
@@ -111,7 +109,6 @@ class Config(FeatureBaseModel):
         )
         return ret
 
-    # @computed_field
     @property
     def ayon_db_install_destination_expanded(self) -> pathlib.Path:
         LOGGER.debug(f"{self.env = }")
