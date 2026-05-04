@@ -39,16 +39,18 @@ src/OpenStudioLandscapes/Ayon/__init__.py:6:5: W0511: TODO: Import directly (no 
 src/OpenStudioLandscapes/Ayon/__init__.py:1:0: C0114: Missing module docstring (missing-module-docstring)
 src/OpenStudioLandscapes/Ayon/__init__.py:1:0: C0103: Module name "Ayon" doesn't conform to snake_case naming style (invalid-name)
 ************* Module OpenStudioLandscapes.Ayon.config.models
-src/OpenStudioLandscapes/Ayon/config/models.py:53:5: W0511: Todo: (fixme)
-src/OpenStudioLandscapes/Ayon/config/models.py:61:5: W0511: Todo: (fixme)
+src/OpenStudioLandscapes/Ayon/config/models.py:50:5: W0511: Todo: (fixme)
+src/OpenStudioLandscapes/Ayon/config/models.py:58:5: W0511: Todo: (fixme)
 src/OpenStudioLandscapes/Ayon/config/models.py:1:0: C0114: Missing module docstring (missing-module-docstring)
-src/OpenStudioLandscapes/Ayon/config/models.py:14:0: C0413: Import "from OpenStudioLandscapes.engine.config.models import FeatureBaseModel" should be placed at the top of the module (wrong-import-position)
-src/OpenStudioLandscapes/Ayon/config/models.py:16:0: C0413: Import "from OpenStudioLandscapes.Ayon import constants, dist" should be placed at the top of the module (wrong-import-position)
-src/OpenStudioLandscapes/Ayon/config/models.py:19:0: C0115: Missing class docstring (missing-class-docstring)
-src/OpenStudioLandscapes/Ayon/config/models.py:20:4: C0103: Class constant name "main" doesn't conform to UPPER_CASE naming style (invalid-name)
-src/OpenStudioLandscapes/Ayon/config/models.py:23:0: C0115: Missing class docstring (missing-class-docstring)
-src/OpenStudioLandscapes/Ayon/config/models.py:95:4: C0116: Missing function or method docstring (missing-function-docstring)
-src/OpenStudioLandscapes/Ayon/config/models.py:113:4: C0116: Missing function or method docstring (missing-function-docstring)
+src/OpenStudioLandscapes/Ayon/config/models.py:6:0: E0401: Unable to import 'OpenStudioLandscapes.engine.logging.loggers' (import-error)
+src/OpenStudioLandscapes/Ayon/config/models.py:6:0: E0611: No name 'logging' in module 'OpenStudioLandscapes.engine' (no-name-in-module)
+src/OpenStudioLandscapes/Ayon/config/models.py:16:0: C0115: Missing class docstring (missing-class-docstring)
+src/OpenStudioLandscapes/Ayon/config/models.py:17:4: C0103: Class constant name "main" doesn't conform to UPPER_CASE naming style (invalid-name)
+src/OpenStudioLandscapes/Ayon/config/models.py:20:0: C0115: Missing class docstring (missing-class-docstring)
+src/OpenStudioLandscapes/Ayon/config/models.py:92:4: C0116: Missing function or method docstring (missing-function-docstring)
+src/OpenStudioLandscapes/Ayon/config/models.py:110:4: C0116: Missing function or method docstring (missing-function-docstring)
+src/OpenStudioLandscapes/Ayon/config/models.py:7:0: C0411: third party import "pydantic.Field" should be placed before first party imports "OpenStudioLandscapes.engine.config.models.FeatureBaseModel", "OpenStudioLandscapes.engine.logging.loggers.FEATURE_LOGGER"  (wrong-import-order)
+src/OpenStudioLandscapes/Ayon/config/models.py:13:0: C0412: Imports from package OpenStudioLandscapes are not grouped (ungrouped-imports)
 ************* Module OpenStudioLandscapes.Ayon.doc.readme
 src/OpenStudioLandscapes/Ayon/doc/readme.py:1:0: C0114: Missing module docstring (missing-module-docstring)
 src/OpenStudioLandscapes/Ayon/doc/readme.py:6:0: C0116: Missing function or method docstring (missing-function-docstring)
@@ -56,5 +58,5 @@ src/OpenStudioLandscapes/Ayon/doc/readme.py:21:8: C2801: Unnecessarily calls dun
 src/OpenStudioLandscapes/Ayon/doc/readme.py:40:8: C2801: Unnecessarily calls dunder method __str__. Use str built-in function. (unnecessary-dunder-call)
 
 ------------------------------------------------------------------
-Your code has been rated at 7.51/10 (previous run: 7.00/10, +0.52)
+Your code has been rated at 7.03/10 (previous run: 6.54/10, +0.49)
 
