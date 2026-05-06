@@ -9,7 +9,7 @@ from pydantic import (
     PositiveInt,
 )
 
-from OpenStudioLandscapes.Ayon import constants, dist, LOGGER
+from OpenStudioLandscapes.Ayon import LOGGER, constants, dist
 
 
 class Branches(enum.StrEnum):
