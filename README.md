@@ -83,354 +83,116 @@ The following settings are available in `OpenStudioLandscapes-Ayon` and are base
 
 
 ```yaml
-# ===
-# env
-# ---
-#
-# Type: typing.Dict
-# Base Class Info:
-#     Required:
-#         False
-#     Description:
-#         None
-#     Default value:
-#         PydanticUndefined
-# Description:
-#     None
-# Required:
-#     False
-# Examples:
-#     None
+$defs:
+  Branches:
+    enum:
+    - main
+    title: Branches
+    type: string
+properties:
+  ayon_db_install_destination:
+    default: '{DOT_LANDSCAPES}/{LANDSCAPE}/{FEATURE}/data/ayon-db'
+    description: The host side Ayon database installation destination.
+    format: path
+    title: Ayon Db Install Destination
+    type: string
+  ayon_port_container:
+    default: 5000
+    description: The Ayon container port.
+    exclusiveMinimum: 0
+    title: Ayon Port Container
+    type: integer
+  ayon_port_host:
+    default: 5005
+    description: The Ayon host port.
+    exclusiveMinimum: 0
+    title: Ayon Port Host
+    type: integer
+  compose_scope:
+    default: default
+    examples:
+    - default
+    - license_server
+    - worker
+    title: Compose Scope
+    type: string
+  docker_compose:
+    default: '{DOT_LANDSCAPES}/{LANDSCAPE}/{FEATURE}/docker_compose/docker-compose.yml'
+    description: The path to the `docker-compose.yml` file.
+    format: path
+    title: Docker Compose
+    type: string
+  docker_compose_override:
+    default: '{DOT_LANDSCAPES}/{LANDSCAPE}/{FEATURE}/docker_compose/docker-compose.override.yml'
+    description: The path to the `docker-compose.yml` file.
+    format: path
+    title: Docker Compose Override
+    type: string
+  docker_compose_worker_yml:
+    default: docker-compose.worker.yml
+    title: Docker Compose Worker Yml
+    type: string
+  docker_compose_yml:
+    default: docker-compose.yml
+    title: Docker Compose Yml
+    type: string
+  enabled:
+    default: true
+    description: Whether the Feature is enabled or not.
+    title: Enabled
+    type: boolean
+  env:
+    additionalProperties: true
+    title: Env
+    type: object
+  feature_name:
+    default: OpenStudioLandscapes-Ayon
+    title: Feature Name
+    type: string
+  group_name:
+    default: OpenStudioLandscapes_Ayon
+    title: Group Name
+    type: string
+  key_prefixes:
+    default:
+    - OpenStudioLandscapes_Ayon
+    items:
+      type: string
+    title: Key Prefixes
+    type: array
+  local_bind_volumes:
+    description: Here you can define Feature specific, arbitrary, absolute bind volume
+      mappings.
+    items:
+      type: string
+    title: Local Bind Volumes
+    type: array
+  local_environment_variables:
+    additionalProperties:
+      type: string
+    description: Here you can define Feature specific, arbitrary environment variables.
+    title: Local Environment Variables
+    type: object
+  repository_branch:
+    $ref: '#/$defs/Branches'
+    default: main
+    description: The branch of the Ayon repository.
+    examples:
+    - main
+  repository_subdir:
+    default: ayon-docker
+    title: Repository Subdir
+    type: string
+  repository_url:
+    default: https://github.com/ynput/ayon-docker.git
+    format: uri
+    maxLength: 2083
+    minLength: 1
+    title: Repository Url
+    type: string
+title: Config
+type: object
 
-
-# ==================
-# local_bind_volumes
-# ------------------
-#
-# Type: typing.List[str]
-# Base Class Info:
-#     Required:
-#         False
-#     Description:
-#         Here you can define Feature specific, arbitrary, absolute bind volume mappings.
-#     Default value:
-#         PydanticUndefined
-# Description:
-#     Here you can define Feature specific, arbitrary, absolute bind volume mappings.
-# Required:
-#     False
-# Examples:
-#     None
-
-
-# ===========================
-# local_environment_variables
-# ---------------------------
-#
-# Type: typing.Dict[str, str]
-# Base Class Info:
-#     Required:
-#         False
-#     Description:
-#         Here you can define Feature specific, arbitrary environment variables.
-#     Default value:
-#         PydanticUndefined
-# Description:
-#     Here you can define Feature specific, arbitrary environment variables.
-# Required:
-#     False
-# Examples:
-#     None
-
-
-# =============
-# config_engine
-# -------------
-#
-# Type: <class 'OpenStudioLandscapes.engine.config.models.ConfigEngine'>
-# Base Class Info:
-#     Required:
-#         False
-#     Description:
-#         None
-#     Default value:
-#         None
-# Description:
-#     None
-# Required:
-#     False
-# Examples:
-#     None
-
-
-# ============
-# distribution
-# ------------
-#
-# Type: <class 'importlib.metadata.Distribution'>
-# Base Class Info:
-#     Required:
-#         False
-#     Description:
-#         None
-#     Default value:
-#         None
-# Description:
-#     None
-# Required:
-#     False
-# Examples:
-#     None
-
-
-# ==========
-# group_name
-# ----------
-#
-# Type: <class 'str'>
-# Base Class Info:
-#     Required:
-#         True
-#     Description:
-#         Dagster Group name. This will represent the group node name. See https://docs.dagster.io/api/dagster/assets for more information
-#     Default value:
-#         PydanticUndefined
-# Description:
-#     None
-# Required:
-#     False
-# Examples:
-#     None
-group_name: OpenStudioLandscapes_Ayon
-
-
-# ============
-# key_prefixes
-# ------------
-#
-# Type: typing.List[str]
-# Base Class Info:
-#     Required:
-#         True
-#     Description:
-#         Dagster Asset key prefixes. This will be reflected in the nesting (directory structure) of the Asset. See https://docs.dagster.io/api/dagster/assets for more information
-#     Default value:
-#         PydanticUndefined
-# Description:
-#     None
-# Required:
-#     False
-# Examples:
-#     None
-key_prefixes:
-- OpenStudioLandscapes_Ayon
-
-
-# =======
-# enabled
-# -------
-#
-# Type: <class 'bool'>
-# Base Class Info:
-#     Required:
-#         False
-#     Description:
-#         Whether the Feature is enabled or not.
-#     Default value:
-#         True
-# Description:
-#     Whether the Feature is enabled or not.
-# Required:
-#     False
-# Examples:
-#     None
-
-
-# =============
-# compose_scope
-# -------------
-#
-# Type: <class 'str'>
-# Base Class Info:
-#     Required:
-#         False
-#     Description:
-#         None
-#     Default value:
-#         default
-# Description:
-#     None
-# Required:
-#     False
-# Examples:
-#     ['default', 'license_server', 'worker']
-
-
-# ============
-# feature_name
-# ------------
-#
-# Type: <class 'str'>
-# Base Class Info:
-#     Required:
-#         True
-#     Description:
-#         The name of the feature. It is derived from the `OpenStudioLandscapes.<Feature>.dist` attribute.
-#     Default value:
-#         PydanticUndefined
-# Description:
-#     None
-# Required:
-#     False
-# Examples:
-#     None
-feature_name: OpenStudioLandscapes-Ayon
-
-
-# ==============
-# docker_compose
-# --------------
-#
-# Type: <class 'pathlib.Path'>
-# Base Class Info:
-#     Required:
-#         False
-#     Description:
-#         The path to the `docker-compose.yml` file.
-#     Default value:
-#         {DOT_LANDSCAPES}/{LANDSCAPE}/{FEATURE}/docker_compose/docker-compose.yml
-# Description:
-#     The path to the `docker-compose.yml` file.
-# Required:
-#     False
-# Examples:
-#     None
-
-
-# =======================
-# docker_compose_override
-# -----------------------
-#
-# Type: <class 'pathlib.Path'>
-# Description:
-#     The path to the `docker-compose.yml` file.
-# Required:
-#     False
-# Examples:
-#     None
-docker_compose_override: '{DOT_LANDSCAPES}/{LANDSCAPE}/{FEATURE}/docker_compose/docker-compose.override.yml'
-
-
-# ===================
-# ayon_port_container
-# -------------------
-#
-# Type: <class 'int'>
-# Description:
-#     The Ayon container port.
-# Required:
-#     False
-# Examples:
-#     None
-ayon_port_container: 5000
-
-
-# ==============
-# ayon_port_host
-# --------------
-#
-# Type: <class 'int'>
-# Description:
-#     The Ayon host port.
-# Required:
-#     False
-# Examples:
-#     None
-ayon_port_host: 5005
-
-
-# ===========================
-# ayon_db_install_destination
-# ---------------------------
-#
-# Type: <class 'pathlib.Path'>
-# Description:
-#     The host side Ayon database installation destination.
-# Required:
-#     False
-# Examples:
-#     None
-ayon_db_install_destination: '{DOT_LANDSCAPES}/{LANDSCAPE}/{FEATURE}/data/ayon-db'
-
-
-# ==============
-# repository_url
-# --------------
-#
-# Type: <class 'pydantic.networks.HttpUrl'>
-# Description:
-#     None
-# Required:
-#     False
-# Examples:
-#     None
-repository_url: https://github.com/ynput/ayon-docker.git
-
-
-# =================
-# repository_branch
-# -----------------
-#
-# Type: <enum 'Branches'>
-# Description:
-#     The branch of the Ayon repository.
-# Required:
-#     False
-# Examples:
-#     ['main']
-repository_branch: main
-
-
-# =================
-# repository_subdir
-# -----------------
-#
-# Type: <class 'str'>
-# Description:
-#     None
-# Required:
-#     False
-# Examples:
-#     None
-repository_subdir: ayon-docker
-
-
-# ==================
-# docker_compose_yml
-# ------------------
-#
-# Type: <class 'str'>
-# Description:
-#     None
-# Required:
-#     False
-# Examples:
-#     None
-docker_compose_yml: docker-compose.yml
-
-
-# =========================
-# docker_compose_worker_yml
-# -------------------------
-#
-# Type: <class 'str'>
-# Description:
-#     None
-# Required:
-#     False
-# Examples:
-#     None
-docker_compose_worker_yml: docker-compose.worker.yml
 ```
 
 </details>
@@ -517,4 +279,4 @@ To follow up on the previous LinkedIn publications, visit:
 
 ***
 
-Last changed: **2026-04-28 14:39:38 UTC**
+Last changed: **2026-05-07 19:22:59 UTC**
