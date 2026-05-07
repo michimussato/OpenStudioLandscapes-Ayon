@@ -4,7 +4,10 @@ from dagster import (
 )
 
 import OpenStudioLandscapes.Ayon.assets
-from OpenStudioLandscapes.Ayon import *
+from OpenStudioLandscapes.Ayon import (
+    dist,
+    LOGGER,
+)
 
 LOGGER.info(f"Loading {dist.name} assets...")
 
