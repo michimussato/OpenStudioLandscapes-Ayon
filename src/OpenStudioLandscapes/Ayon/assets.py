@@ -48,9 +48,9 @@ from OpenStudioLandscapes.engine.utils import (
 from OpenStudioLandscapes.engine.utils.docker.compose_dicts import get_network_dicts
 
 from OpenStudioLandscapes.Ayon import (
+    ASSET_HEADER,
     config,
     dist,
-    ASSET_HEADER,
 )
 
 # https://github.com/yaml/pyyaml/issues/722#issuecomment-1969292770

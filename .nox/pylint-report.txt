@@ -11,9 +11,6 @@ src/OpenStudioLandscapes/Ayon/assets.py:212:0: R0915: Too many statements (51/50
 ************* Module OpenStudioLandscapes.Ayon.definitions
 src/OpenStudioLandscapes/Ayon/definitions.py:1:0: C0114: Missing module docstring (missing-module-docstring)
 src/OpenStudioLandscapes/Ayon/definitions.py:12:0: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
-************* Module OpenStudioLandscapes.Ayon.constants
-src/OpenStudioLandscapes/Ayon/constants.py:7:1: W0511: Todo (fixme)
-src/OpenStudioLandscapes/Ayon/constants.py:1:0: C0114: Missing module docstring (missing-module-docstring)
 ************* Module OpenStudioLandscapes.Ayon._definitions_with_upstream_specs
 src/OpenStudioLandscapes/Ayon/_definitions_with_upstream_specs.py:1:0: C0114: Missing module docstring (missing-module-docstring)
 ************* Module OpenStudioLandscapes.Ayon.__init__
@@ -21,6 +18,7 @@ src/OpenStudioLandscapes/Ayon/__init__.py:15:5: W0511: TODO: Import directly (no
 ************* Module OpenStudioLandscapes.Ayon
 src/OpenStudioLandscapes/Ayon/__init__.py:1:0: C0114: Missing module docstring (missing-module-docstring)
 src/OpenStudioLandscapes/Ayon/__init__.py:1:0: C0103: Module name "Ayon" doesn't conform to snake_case naming style (invalid-name)
+src/OpenStudioLandscapes/Ayon/__init__.py:39:4: C0103: Constant name "fill" doesn't conform to UPPER_CASE naming style (invalid-name)
 ************* Module OpenStudioLandscapes.Ayon.config.models
 src/OpenStudioLandscapes/Ayon/config/models.py:53:5: W0511: Todo: (fixme)
 src/OpenStudioLandscapes/Ayon/config/models.py:61:5: W0511: Todo: (fixme)
@@ -43,5 +41,5 @@ src/OpenStudioLandscapes/Ayon/doc/readme.py:21:8: C2801: Unnecessarily calls dun
 src/OpenStudioLandscapes/Ayon/doc/readme.py:40:8: C2801: Unnecessarily calls dunder method __str__. Use str built-in function. (unnecessary-dunder-call)
 
 ------------------------------------------------------------------
-Your code has been rated at 8.21/10 (previous run: 8.16/10, +0.05)
+Your code has been rated at 8.26/10 (previous run: 8.20/10, +0.06)
 
