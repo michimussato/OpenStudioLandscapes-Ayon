@@ -41,5 +41,5 @@ src/OpenStudioLandscapes/Ayon/doc/readme.py:21:8: C2801: Unnecessarily calls dun
 src/OpenStudioLandscapes/Ayon/doc/readme.py:40:8: C2801: Unnecessarily calls dunder method __str__. Use str built-in function. (unnecessary-dunder-call)
 
 ------------------------------------------------------------------
-Your code has been rated at 8.26/10 (previous run: 8.20/10, +0.06)
+Your code has been rated at 8.27/10 (previous run: 8.22/10, +0.06)
 
