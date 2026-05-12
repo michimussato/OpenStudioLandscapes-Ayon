@@ -83,115 +83,106 @@ The following settings are available in `OpenStudioLandscapes-Ayon` and are base
 
 
 ```yaml
-$defs:
-  Branches:
-    enum:
-    - main
-    title: Branches
+ayon_db_install_destination:
+  default: '{DOT_LANDSCAPES}/{LANDSCAPE}/{FEATURE}/data/ayon-db'
+  description: The host side Ayon database installation destination.
+  format: path
+  title: Ayon Db Install Destination
+  type: string
+ayon_port_container:
+  default: 5000
+  description: The Ayon container port.
+  exclusiveMinimum: 0
+  title: Ayon Port Container
+  type: integer
+ayon_port_host:
+  default: 5005
+  description: The Ayon host port.
+  exclusiveMinimum: 0
+  title: Ayon Port Host
+  type: integer
+compose_scope:
+  default: default
+  examples:
+  - default
+  - license_server
+  - worker
+  title: Compose Scope
+  type: string
+docker_compose:
+  default: '{DOT_LANDSCAPES}/{LANDSCAPE}/{FEATURE}/docker_compose/docker-compose.yml'
+  description: The path to the `docker-compose.yml` file.
+  format: path
+  title: Docker Compose
+  type: string
+docker_compose_override:
+  default: '{DOT_LANDSCAPES}/{LANDSCAPE}/{FEATURE}/docker_compose/docker-compose.override.yml'
+  description: The path to the `docker-compose.yml` file.
+  format: path
+  title: Docker Compose Override
+  type: string
+docker_compose_worker_yml:
+  default: docker-compose.worker.yml
+  title: Docker Compose Worker Yml
+  type: string
+docker_compose_yml:
+  default: docker-compose.yml
+  title: Docker Compose Yml
+  type: string
+enabled:
+  default: true
+  description: Whether the Feature is enabled or not.
+  title: Enabled
+  type: boolean
+env:
+  additionalProperties: true
+  title: Env
+  type: object
+feature_name:
+  default: OpenStudioLandscapes-Ayon
+  title: Feature Name
+  type: string
+group_name:
+  default: OpenStudioLandscapes_Ayon
+  title: Group Name
+  type: string
+key_prefixes:
+  default:
+  - OpenStudioLandscapes_Ayon
+  items:
     type: string
-properties:
-  ayon_db_install_destination:
-    default: '{DOT_LANDSCAPES}/{LANDSCAPE}/{FEATURE}/data/ayon-db'
-    description: The host side Ayon database installation destination.
-    format: path
-    title: Ayon Db Install Destination
+  title: Key Prefixes
+  type: array
+local_bind_volumes:
+  description: Here you can define Feature specific, arbitrary, absolute bind volume
+    mappings.
+  items:
     type: string
-  ayon_port_container:
-    default: 5000
-    description: The Ayon container port.
-    exclusiveMinimum: 0
-    title: Ayon Port Container
-    type: integer
-  ayon_port_host:
-    default: 5005
-    description: The Ayon host port.
-    exclusiveMinimum: 0
-    title: Ayon Port Host
-    type: integer
-  compose_scope:
-    default: default
-    examples:
-    - default
-    - license_server
-    - worker
-    title: Compose Scope
+  title: Local Bind Volumes
+  type: array
+local_environment_variables:
+  additionalProperties:
     type: string
-  docker_compose:
-    default: '{DOT_LANDSCAPES}/{LANDSCAPE}/{FEATURE}/docker_compose/docker-compose.yml'
-    description: The path to the `docker-compose.yml` file.
-    format: path
-    title: Docker Compose
-    type: string
-  docker_compose_override:
-    default: '{DOT_LANDSCAPES}/{LANDSCAPE}/{FEATURE}/docker_compose/docker-compose.override.yml'
-    description: The path to the `docker-compose.yml` file.
-    format: path
-    title: Docker Compose Override
-    type: string
-  docker_compose_worker_yml:
-    default: docker-compose.worker.yml
-    title: Docker Compose Worker Yml
-    type: string
-  docker_compose_yml:
-    default: docker-compose.yml
-    title: Docker Compose Yml
-    type: string
-  enabled:
-    default: true
-    description: Whether the Feature is enabled or not.
-    title: Enabled
-    type: boolean
-  env:
-    additionalProperties: true
-    title: Env
-    type: object
-  feature_name:
-    default: OpenStudioLandscapes-Ayon
-    title: Feature Name
-    type: string
-  group_name:
-    default: OpenStudioLandscapes_Ayon
-    title: Group Name
-    type: string
-  key_prefixes:
-    default:
-    - OpenStudioLandscapes_Ayon
-    items:
-      type: string
-    title: Key Prefixes
-    type: array
-  local_bind_volumes:
-    description: Here you can define Feature specific, arbitrary, absolute bind volume
-      mappings.
-    items:
-      type: string
-    title: Local Bind Volumes
-    type: array
-  local_environment_variables:
-    additionalProperties:
-      type: string
-    description: Here you can define Feature specific, arbitrary environment variables.
-    title: Local Environment Variables
-    type: object
-  repository_branch:
-    $ref: '#/$defs/Branches'
-    default: main
-    description: The branch of the Ayon repository.
-    examples:
-    - main
-  repository_subdir:
-    default: ayon-docker
-    title: Repository Subdir
-    type: string
-  repository_url:
-    default: https://github.com/ynput/ayon-docker.git
-    format: uri
-    maxLength: 2083
-    minLength: 1
-    title: Repository Url
-    type: string
-title: Config
-type: object
+  description: Here you can define Feature specific, arbitrary environment variables.
+  title: Local Environment Variables
+  type: object
+repository_branch:
+  $ref: '#/$defs/Branches'
+  default: main
+  description: The branch of the Ayon repository.
+  examples:
+  - main
+repository_subdir:
+  default: ayon-docker
+  title: Repository Subdir
+  type: string
+repository_url:
+  default: https://github.com/ynput/ayon-docker.git
+  format: uri
+  maxLength: 2083
+  minLength: 1
+  title: Repository Url
+  type: string
 
 ```
 
@@ -279,4 +270,4 @@ To follow up on the previous LinkedIn publications, visit:
 
 ***
 
-Last changed: **2026-05-09 11:25:16 UTC**
+Last changed: **2026-05-12 09:59:40 UTC**
