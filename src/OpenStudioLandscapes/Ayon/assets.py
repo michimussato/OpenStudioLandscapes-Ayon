@@ -6,7 +6,7 @@ import pathlib
 import textwrap
 from collections import ChainMap
 from functools import reduce
-from typing import Dict, Generator, List, Union, Any
+from typing import Any, Dict, Generator, List, Union
 
 import git
 import yaml
@@ -20,8 +20,6 @@ from dagster import (
     Output,
     asset,
 )
-
-from OpenStudioLandscapes.engine.link.models import OpenStudioLandscapesFeatureIn
 from docker_compose_graph.utils import (
     deep_merge,
 )
@@ -45,6 +43,7 @@ from OpenStudioLandscapes.engine.constants import (
 from OpenStudioLandscapes.engine.enums import (
     DockerComposePolicies,
 )
+from OpenStudioLandscapes.engine.link.models import OpenStudioLandscapesFeatureIn
 from OpenStudioLandscapes.engine.utils import (
     get_docker_compose_names,
     get_relative_path_via_common_root,
@@ -420,7 +419,9 @@ def compose(
     CONFIG.ayon_addons_dir_expanded.mkdir(parents=True, exist_ok=True)
     context.log.info(f"Directory {CONFIG.ayon_addons_dir_expanded.as_posix()} created.")
     CONFIG.ayon_storage_dir_expanded.mkdir(parents=True, exist_ok=True)
-    context.log.info(f"Directory {CONFIG.ayon_storage_dir_expanded.as_posix()} created.")
+    context.log.info(
+        f"Directory {CONFIG.ayon_storage_dir_expanded.as_posix()} created."
+    )
     # CONFIG.ayon_backend_dir_expanded.mkdir(parents=True, exist_ok=True)
     # context.log.info(f"Directory {CONFIG.ayon_backend_dir_expanded.as_posix()} created.")
 

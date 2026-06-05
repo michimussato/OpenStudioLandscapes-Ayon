@@ -48,7 +48,7 @@ class Config(FeatureBaseModel):
                     "name": "openstudiolandscapes",
                     "password": "openstudiolandscapes",
                     "fullName": "Ayon OpenStudioLandscapes Admin",
-                    "isAdmin": True
+                    "isAdmin": True,
                 },
             ]
         }
@@ -74,15 +74,21 @@ class Config(FeatureBaseModel):
     )
     ayon_db_install_destination: pathlib.Path = Field(
         description="The host side Ayon database installation destination.",
-        default=pathlib.Path("{DOT_LANDSCAPES}/{LANDSCAPE}/{FEATURE}/data/postgres/data/ayon-db"),
+        default=pathlib.Path(
+            "{DOT_LANDSCAPES}/{LANDSCAPE}/{FEATURE}/data/postgres/data/ayon-db"
+        ),
     )
     ayon_addons_dir: pathlib.Path = Field(
         description="The host side Ayon addons directory.",
-        default=pathlib.Path("{DOT_LANDSCAPES}/{LANDSCAPE}/{FEATURE}/data/server/addons"),
+        default=pathlib.Path(
+            "{DOT_LANDSCAPES}/{LANDSCAPE}/{FEATURE}/data/server/addons"
+        ),
     )
     ayon_storage_dir: pathlib.Path = Field(
         description="The host side Ayon storage directory.",
-        default=pathlib.Path("{DOT_LANDSCAPES}/{LANDSCAPE}/{FEATURE}/data/server/storage"),
+        default=pathlib.Path(
+            "{DOT_LANDSCAPES}/{LANDSCAPE}/{FEATURE}/data/server/storage"
+        ),
     )
     # ayon_backend_dir: pathlib.Path = Field(
     #     description="The host side Ayon backend directory. This will only work if the "

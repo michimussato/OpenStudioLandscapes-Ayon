@@ -55,8 +55,7 @@ def readme_feature(
     )
 
     doc.add_code(
-        code=textwrap.dedent(
-            """\
+        code=textwrap.dedent("""\
             # $(which docker) \\
                 --config /home/michael/test/.landscapes/2026-06-05_10-22-38__small-quartz-rambunctious-cephalopod/OpenStudioLandscapes/OpenStudioLandscapes_Base__docker_config_json \\
                 compose \\
@@ -72,8 +71,7 @@ def readme_feature(
             DEBUG   setup.users                | Creating password for user openstudiolandscapes
             INFO    setup.users                | Saving user openstudiolandscapes
             SUCCESS __main__                   | Setup is finished\
-            """
-        ),
+            """),
         lang="generic",
     )
 
