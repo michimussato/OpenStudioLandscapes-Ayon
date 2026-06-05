@@ -9,6 +9,7 @@
    3. [Configure](#configure)
       1. [Default Configuration](#default-configuration)
    4. [Local Development/Unit Testing/Debugging](#local-developmentunit-testingdebugging)
+   5. [Initial OpenStudioLandscapes-Ayon Server Setup](#initial-openstudiolandscapes-ayon-server-setup)
 2. [External Resources](#external-resources)
    1. [Official Documentation](#official-documentation)
       1. [Dev Resources](#dev-resources)
@@ -83,8 +84,14 @@ The following settings are available in `OpenStudioLandscapes-Ayon` and are base
 
 
 ```yaml
+ayon_addons_dir:
+  default: '{DOT_LANDSCAPES}/{LANDSCAPE}/{FEATURE}/data/server/addons'
+  description: The host side Ayon addons directory.
+  format: path
+  title: Ayon Addons Dir
+  type: string
 ayon_db_install_destination:
-  default: '{DOT_LANDSCAPES}/{LANDSCAPE}/{FEATURE}/data/ayon-db'
+  default: '{DOT_LANDSCAPES}/{LANDSCAPE}/{FEATURE}/data/postgres/data/ayon-db'
   description: The host side Ayon database installation destination.
   format: path
   title: Ayon Db Install Destination
@@ -101,6 +108,12 @@ ayon_port_host:
   exclusiveMinimum: 0
   title: Ayon Port Host
   type: integer
+ayon_storage_dir:
+  default: '{DOT_LANDSCAPES}/{LANDSCAPE}/{FEATURE}/data/server/storage'
+  description: The host side Ayon storage directory.
+  format: path
+  title: Ayon Storage Dir
+  type: string
 compose_scope:
   default: default
   examples:
@@ -183,6 +196,16 @@ repository_url:
   minLength: 1
   title: Repository Url
   type: string
+setup_template:
+  additionalProperties: true
+  default:
+    users:
+    - fullName: Ayon OpenStudioLandscapes Admin
+      isAdmin: true
+      name: openstudiolandscapes
+      password: openstudiolandscapes
+  title: Setup Template
+  type: object
 
 ```
 
@@ -201,6 +224,46 @@ pip install --upgrade pip setuptools setuptools_scm wheel
 pip install --editable .[dev]
 dagster dev --workspace workspace.yaml
 ```
+
+***
+
+## Initial OpenStudioLandscapes-Ayon Server Setup
+
+The freshly deployed `OpenStudioLandscapes-Ayon` instance does **not** come with pre-created users. Ayon suggests to run `make setup`, however, this does not seem to work reliably. Execute the command (locally) shown here for this matter when the Landscape is running:
+
+![Screenshot ](media/images/2026-06-05_12-22.png)
+
+![Screenshot ](media/images/2026-06-05_12-22_1.png)
+
+![Screenshot ](media/images/2026-06-05_12-02.png)
+
+```generic
+# $(which docker) \
+    --config /home/michael/test/.landscapes/2026-06-05_10-22-38__small-quartz-rambunctious-cephalopod/OpenStudioLandscapes/OpenStudioLandscapes_Base__docker_config_json \
+    compose \
+    --project-name 2026-06-05_10-22-38__small-quartz-rambunctious-cephalopod-default \
+    exec \
+    --no-tty \
+    server \
+    python -m setup - < /home/michael/test/.landscapes/2026-06-05_10-22-38__small-quartz-rambunctious-cephalopod/OpenStudioLandscapes-Ayon/settings/setup_template.json
+INFO    __main__                   | Starting setup
+DEBUG   setup.database             | Applying 12 database migrations
+INFO    setup.template             | Force install requested
+INFO    setup.template             | Reading setup file from stdin
+DEBUG   setup.users                | Creating password for user openstudiolandscapes
+INFO    setup.users                | Saving user openstudiolandscapes
+SUCCESS __main__                   | Setup is finished            
+```
+
+After this step, you should be able to log in to Ayon with the credentials specified in the `setup_template.json` file. Consult `config.yml` for the defaults.
+
+![Screenshot ](media/images/2026-06-05_12-23.png)
+
+More information here:
+
+- [AYON Server Local Deployment](https://help.ayon.app/en/help/articles/2293963-ayon-server-local-deployment)
+- [AYON Server Provisioning](https://help.ayon.app/en/articles/4089565-ayon-server-provisioning)
+- [template.json](https://github.com/ynput/ayon-docker/blob/main/settings/template.json)
 
 ***
 
@@ -270,4 +333,4 @@ To follow up on the previous LinkedIn publications, visit:
 
 ***
 
-Last changed: **2026-05-13 13:31:05 UTC**
+Last changed: **2026-06-05 10:25:41 UTC**

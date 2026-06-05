@@ -28,6 +28,32 @@ class Config(FeatureBaseModel):
 
     key_prefixes: List[str] = ASSET_HEADER["key_prefix"]
 
+    setup_template: Dict = Field(
+        default={
+            "users": [
+                # These are from the default:
+                # - [](https://github.com/ynput/ayon-docker/blob/main/settings/template.json)
+                # {
+                #     "name": "admin",
+                #     "password": "admin",
+                #     "fullName": "Ayon admin",
+                #     "isAdmin": True
+                # },
+                # {
+                #     "name": "service",
+                #     "apiKey": "veryinsecurapikey",
+                #     "isService": True
+                # },
+                {
+                    "name": "openstudiolandscapes",
+                    "password": "openstudiolandscapes",
+                    "fullName": "Ayon OpenStudioLandscapes Admin",
+                    "isAdmin": True
+                },
+            ]
+        }
+    )
+
     docker_compose_override: pathlib.Path = Field(
         default=pathlib.Path(
             "{DOT_LANDSCAPES}/{LANDSCAPE}/{FEATURE}/docker_compose/docker-compose.override.yml"
@@ -48,8 +74,22 @@ class Config(FeatureBaseModel):
     )
     ayon_db_install_destination: pathlib.Path = Field(
         description="The host side Ayon database installation destination.",
-        default=pathlib.Path("{DOT_LANDSCAPES}/{LANDSCAPE}/{FEATURE}/data/ayon-db"),
+        default=pathlib.Path("{DOT_LANDSCAPES}/{LANDSCAPE}/{FEATURE}/data/postgres/data/ayon-db"),
     )
+    ayon_addons_dir: pathlib.Path = Field(
+        description="The host side Ayon addons directory.",
+        default=pathlib.Path("{DOT_LANDSCAPES}/{LANDSCAPE}/{FEATURE}/data/server/addons"),
+    )
+    ayon_storage_dir: pathlib.Path = Field(
+        description="The host side Ayon storage directory.",
+        default=pathlib.Path("{DOT_LANDSCAPES}/{LANDSCAPE}/{FEATURE}/data/server/storage"),
+    )
+    # ayon_backend_dir: pathlib.Path = Field(
+    #     description="The host side Ayon backend directory. This will only work if the "
+    #                 "backend engine is checked out manually. Hence, this might be "
+    #                 "a feature for the future.",
+    #     default=pathlib.Path("{DOT_LANDSCAPES}/{LANDSCAPE}/{FEATURE}/data/server/backend"),
+    # )
     # Todo:
     #  - [ ] Implement?
     # ayon_db_inside_container: bool = Field(
@@ -127,6 +167,63 @@ class Config(FeatureBaseModel):
             )
         )
         return ret
+
+    @property
+    def ayon_addons_dir_expanded(self) -> pathlib.Path:
+        LOGGER.debug(f"{self.env = }")
+        if self.env is None:
+            raise KeyError("`env` is `None`.")
+
+        LOGGER.debug(f"Expanding {self.ayon_addons_dir}...")
+        ret = pathlib.Path(
+            self.ayon_addons_dir.expanduser()  # pylint: disable=E1101
+            .as_posix()
+            .format(
+                **{
+                    "FEATURE": self.feature_name,
+                    **self.env,
+                }
+            )
+        )
+        return ret
+
+    @property
+    def ayon_storage_dir_expanded(self) -> pathlib.Path:
+        LOGGER.debug(f"{self.env = }")
+        if self.env is None:
+            raise KeyError("`env` is `None`.")
+
+        LOGGER.debug(f"Expanding {self.ayon_storage_dir}...")
+        ret = pathlib.Path(
+            self.ayon_storage_dir.expanduser()  # pylint: disable=E1101
+            .as_posix()
+            .format(
+                **{
+                    "FEATURE": self.feature_name,
+                    **self.env,
+                }
+            )
+        )
+        return ret
+
+    # @property
+    # def ayon_backend_dir_expanded(self) -> pathlib.Path:
+    #     LOGGER.debug(f"{self.env = }")
+    #     if self.env is None:
+    #         raise KeyError("`env` is `None`.")
+    #
+    #     LOGGER.debug(f"Expanding {self.ayon_backend_dir}...")
+    #     ret = pathlib.Path(
+    #         self.ayon_backend_dir.expanduser()  # pylint: disable=E1101
+    #         .as_posix()
+    #         .format(
+    #             **{
+    #                 "FEATURE": self.feature_name,
+    #                 **self.env,
+    #             }
+    #         )
+    #     )
+    #     return ret
 
 
 if __name__ == "__main__":

@@ -1,10 +1,12 @@
 # pylint: disable=line-too-long,invalid-name
 import copy
 import enum
+import json
 import pathlib
+import textwrap
 from collections import ChainMap
 from functools import reduce
-from typing import Dict, Generator, List, Union
+from typing import Dict, Generator, List, Union, Any
 
 import git
 import yaml
@@ -18,6 +20,8 @@ from dagster import (
     Output,
     asset,
 )
+
+from OpenStudioLandscapes.engine.link.models import OpenStudioLandscapesFeatureIn
 from docker_compose_graph.utils import (
     deep_merge,
 )
@@ -193,6 +197,96 @@ def compose_networks(
     )
 
 
+@asset(
+    **ASSET_HEADER,
+    ins={
+        "CONFIG": AssetIn(
+            AssetKey([*ASSET_HEADER["key_prefix"], "CONFIG"]),
+        ),
+        "feature_in": AssetIn(
+            AssetKey([*ASSET_HEADER["key_prefix"], "feature_in"]),
+        ),
+    },
+    description=textwrap.dedent("""
+        Help on server deployment with `settings.json`:
+        - [AYON Server Local Deployment](https://help.ayon.app/en/help/articles/2293963-ayon-server-local-deployment)
+        - [AYON Server Provisioning](https://help.ayon.app/en/articles/4089565-ayon-server-provisioning)
+        - [template.json](https://github.com/ynput/ayon-docker/blob/main/settings/template.json)
+        """),
+)
+def setup_json(
+    context: AssetExecutionContext,
+    CONFIG: config.models.Config,  # pylint: disable=redefined-outer-name
+    feature_in: OpenStudioLandscapesFeatureIn,  # pylint: disable=redefined-outer-name
+) -> Generator[Output[pathlib.Path] | AssetMaterialization | Any, None, None]:
+
+    env: Dict = CONFIG.env
+
+    setup_template_json_path = pathlib.Path(
+        env["DOT_LANDSCAPES"],
+        env.get("LANDSCAPE", "default"),
+        f"{dist.name}",
+        "settings",
+        "setup_template.json",
+    ).expanduser()
+
+    setup_template_json_path.parent.mkdir(
+        parents=True,
+        exist_ok=True,
+    )
+
+    compose_project_name = (
+        f"{env.get('LANDSCAPE', 'default').replace('.', '-')}-{CONFIG.compose_scope}"
+    )
+
+    context.log.debug(CONFIG.config_engine)
+
+    docker_config_json: pathlib.Path = (
+        feature_in.openstudiolandscapes_base.docker_config_json
+    )
+
+    # Run this command to deploy a vanilla Ayon server
+    # - creates default values like users for example
+    # - if the user already exists, it won't edit it
+    # - Todo:
+    #    - [ ] security concern: run this script
+    #          and create admins. Fine for now.
+    setup_command = [
+        "$(which docker)",
+        "--config",
+        docker_config_json.as_posix(),
+        "compose",
+        "--project-name",
+        compose_project_name,
+        "exec",
+        "--no-tty",
+        "server",
+        f"python -m setup - < {setup_template_json_path.as_posix()}",
+    ]
+
+    setup_template_json_dict: Dict = copy.deepcopy(CONFIG.setup_template)
+
+    context.log.debug(f"{setup_template_json_dict = }")
+
+    with open(setup_template_json_path, "w") as fw:
+        json.dump(setup_template_json_dict, fw, indent=2)
+
+    yield Output(setup_template_json_path)
+
+    yield AssetMaterialization(
+        asset_key=context.asset_key,
+        metadata={
+            "__".join(context.asset_key.path): MetadataValue.path(
+                setup_template_json_path
+            ),
+            "setup_json": MetadataValue.md(
+                f"```json\n{setup_template_json_path.read_text(encoding='utf-8')}\n```"
+            ),
+            "setup_command": MetadataValue.path(" ".join(setup_command)),
+        },
+    )
+
+
 # Todo:
 #  - [ ] Maybe fix this Non-Standard `compose` implementation
 @asset(
@@ -207,6 +301,9 @@ def compose_networks(
         "clone_repository": AssetIn(
             AssetKey([*ASSET_HEADER["key_prefix"], "clone_repository"]),
         ),
+        # "setup_json": AssetIn(
+        #     AssetKey([*ASSET_HEADER["key_prefix"], "setup_json"]),
+        # ),
     },
 )
 def compose(
@@ -214,6 +311,7 @@ def compose(
     CONFIG: config.models.Config,  # pylint: disable=redefined-outer-name
     compose_networks: Dict,  # pylint: disable=redefined-outer-name
     clone_repository: pathlib.Path,  # pylint: disable=redefined-outer-name
+    # setup_json: pathlib.Path,  # pylint: disable=redefined-outer-name
 ) -> Generator[
     Output[Dict[str, List[Dict[str, List[str]]]]] | AssetMaterialization,
     None,
@@ -261,13 +359,16 @@ def compose(
 
     parent = clone_repository / CONFIG.docker_compose_yml
 
+    # postgres service
+    # We just need to add postgresql as a subdirectory so that
+    # Postgres can set its own permissions
     ayon_db_dir_host = (
         pathlib.Path(CONFIG.ayon_db_install_destination_expanded) / "postgresql"
     )
     ayon_db_dir_host.mkdir(parents=True, exist_ok=True)
     context.log.info(f"Directory {ayon_db_dir_host.as_posix()} created.")
 
-    volumes_dict = {
+    volumes_dict_postgres = {
         "volumes": [
             f"{ayon_db_dir_host.as_posix()}:/var/lib/postgresql/data:rw",
         ]
@@ -277,7 +378,7 @@ def compose(
 
     _volume_relative = []
 
-    for v in volumes_dict["volumes"]:
+    for v in volumes_dict_postgres["volumes"]:
 
         host, container = v.split(":", maxsplit=1)
 
@@ -304,7 +405,66 @@ def compose(
             f"{volume_dir_host_rel_path.as_posix()}:{container}",
         )
 
-    volumes_dict = {
+    volumes_dict_postgres = {
+        "volumes": list(
+            {
+                "/etc/localtime:/etc/localtime:ro",
+                *_volume_relative,
+                *config_engine.global_bind_volumes,
+                *CONFIG.local_bind_volumes,
+            }
+        )
+    }
+
+    # server service
+    CONFIG.ayon_addons_dir_expanded.mkdir(parents=True, exist_ok=True)
+    context.log.info(f"Directory {CONFIG.ayon_addons_dir_expanded.as_posix()} created.")
+    CONFIG.ayon_storage_dir_expanded.mkdir(parents=True, exist_ok=True)
+    context.log.info(f"Directory {CONFIG.ayon_storage_dir_expanded.as_posix()} created.")
+    # CONFIG.ayon_backend_dir_expanded.mkdir(parents=True, exist_ok=True)
+    # context.log.info(f"Directory {CONFIG.ayon_backend_dir_expanded.as_posix()} created.")
+
+    volumes_dict_server = {
+        "volumes": [
+            f"{CONFIG.ayon_addons_dir_expanded.as_posix()}:/addons:rw",
+            f"{CONFIG.ayon_storage_dir_expanded.as_posix()}:/storage:rw",
+            # f"{setup_json.as_posix()}:/settings/setup.json:ro",
+            # f"{CONFIG.ayon_backend_dir_expanded.as_posix()}:/backend:rw",
+        ]
+    }
+
+    # For portability, convert absolute volume paths to relative paths
+
+    _volume_relative = []
+
+    for v in volumes_dict_server["volumes"]:
+
+        host, container = v.split(":", maxsplit=1)
+
+        volume_dir_host_rel_path = get_relative_path_via_common_root(
+            context=context,
+            # path_src=pathlib.Path(env["DOCKER_COMPOSE"]),
+            # This leads to a wrong relative path (missing one "parent")
+            # path element.
+            # It uses {DOT_LANDSCAPES}/{LANDSCAPE}/Ayon__Ayon/Ayon__DOCKER_COMPOSE/docker_compose/docker-compose.yml
+            # as the starting point but does not lead to the correct resolution.
+            # In fact, it seems like the actual CWD for this is the docker-compose.yml
+            # from the repo (main entry point) which seems to lead to an incorrect amount
+            # of `cd ..` actions.
+            # Let's try with the yml from the repo as the path_src instead of the one from
+            # "DOCKER_COMPOSE"
+            # => seems to do the trick to make sure, we end up using the directory
+            # we intended to use
+            path_src=CONFIG.docker_compose_expanded,
+            path_dst=pathlib.Path(host),
+            path_common_root=pathlib.Path(env["DOT_LANDSCAPES"]),
+        )
+
+        _volume_relative.append(
+            f"{volume_dir_host_rel_path.as_posix()}:{container}",
+        )
+
+    volumes_dict_server = {
         "volumes": list(
             {
                 "/etc/localtime:/etc/localtime:ro",
@@ -345,7 +505,7 @@ def compose(
                 "container_name": container_name_postgres,
                 "hostname": host_name_postgres,
                 "domainname": config_engine.openstudiolandscapes__domain_lan,
-                **copy.deepcopy(volumes_dict),
+                **copy.deepcopy(volumes_dict_postgres),
                 **copy.deepcopy(network_dict),
                 "environment": {
                     "TZ": config_engine.tz,
@@ -371,6 +531,11 @@ def compose(
                 #  - [ ] Need to find out whether `ports` Override
                 #  also overrides the exports in the source ayon-docker-compose.yml
                 #  "exports": OverrideArray([]),
+                # Setup:
+                # SERVER_CONTAINER=server
+                # SETUP_CMD=docker compose exec -T $(SERVER_CONTAINER) python -m setup
+                # AYON_STACK_SETTINGS_FILE ?= settings/template.json
+                # $(SETUP_CMD) - < $(AYON_STACK_SETTINGS_FILE)
                 "environment": {
                     "TZ": config_engine.tz,
                     **config_engine.global_environment_variables,
@@ -378,6 +543,7 @@ def compose(
                 },
                 **copy.deepcopy(network_dict),
                 **copy.deepcopy(ports_dict),
+                **copy.deepcopy(volumes_dict_server),
             },
         },
     }
@@ -428,6 +594,49 @@ def compose(
     docker_dict_include = {
         "include": [
             {
+                # Todo
+                #  - [x] https://help.ayon.app/en/articles/4089565-ayon-server-provisioning
+                #        https://github.com/michimussato/OpenStudioLandscapesSetup-Faranna/commit/c90a8bd9de1bc5fd55f0f6c254ae734d150991a4
+                #        Do we have to set
+                #        the project_directory:?
+                #        Looks like the database ends up
+                #        in the wrong directory
+                #        ayon_db_install_destination: '{DOT_LANDSCAPES}/.persistent/{FEATURE}/data/ayon-db'
+                #        Results in:
+                #        ../../../.persistent/OpenStudioLandscapes-Ayon/data/ayon-db/postgresql:/var/lib/postgresql/data:rw
+                #        /data/.openstudiolandscapes/.landscapes/2026-02-09_11-54-04__sideways-principled-festive-newt/OpenStudioLandscapes-Ayon/.persistent/OpenStudioLandscapes-Ayon/data/ayon-db
+                #        Is it relative to
+                #        {
+                #          "include": [
+                #            {
+                #              "path": [
+                #   -->          "../../../2026-02-09_11-54-04__sideways-principled-festive-newt/OpenStudioLandscapes-Ayon/OpenStudioLandscapes_Ayon__clone_repository/repos/ayon-docker/docker-compose.yml",
+                #                "../../../2026-02-09_11-54-04__sideways-principled-festive-newt/OpenStudioLandscapes-Ayon/docker_compose/docker-compose.override.yml"
+                #              ]
+                #            }
+                #          ]
+                #        }
+                #
+                #        ls -al /data/.openstudiolandscapes/.landscapes/2026-02-09_11-54-04__sideways-principled-festive-newt/OpenStudioLandscapes-Ayon/.persistent
+                #        lrwxrwxrwx 1 root root 51 Jun  4 16:32 /data/.openstudiolandscapes/.landscapes/2026-02-09_11-54-04__sideways-principled-festive-newt/OpenStudioLandscapes-Ayon/.persistent -> /data/.openstudiolandscapes/.landscapes/.persistent
+                #
+                #        cat /data/.openstudiolandscapes/.landscapes/2026-02-09_11-54-04__sideways-principled-festive-newt/OpenStudioLandscapes-Ayon/OpenStudioLandscapes_Ayon__clone_repository/repos/ayon-docker/settings/template.json
+                #        {
+                #            "users": [
+                #                {
+                #                    "name": "admin",
+                #                    "password": "admin",
+                #                    "fullName": "Ayon admin",
+                #                    "isAdmin": true
+                #                },
+                #                {
+                #                    "name": "service",
+                #                    "apiKey": "veryinsecurapikey",
+                #                    "isService": true
+                #                }
+                #            ]
+                #        }
+                "project_directory": ".",  # This makes sure that all relative paths refer to the directory where THIS docker-compose file lives
                 "path": rel_paths,
             },
         ],
