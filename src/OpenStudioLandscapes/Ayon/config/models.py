@@ -117,8 +117,6 @@ class Config(FeatureBaseModel):
     #             "to 80 for now. Other values *may* render Ayon inoperable."
     #         )
 
-    # Todo:
-    #  - [ ] Convert to str
     repository_url: str = Field(
         default="https://github.com/ynput/ayon-docker.git",
     )
