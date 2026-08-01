@@ -135,7 +135,7 @@ def clone_repository(
 
     try:
         git.Repo.clone_from(
-            url=str(CONFIG.repository_url),
+            url=CONFIG.repository_url,
             to_path=repository_dir_full,
             branch=CONFIG.repository_branch,
         )
