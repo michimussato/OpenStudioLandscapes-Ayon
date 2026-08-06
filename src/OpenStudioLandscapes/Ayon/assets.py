@@ -35,7 +35,7 @@ from OpenStudioLandscapes.engine.common_assets import (  # compose,
     group_in,
     group_out,
 )
-from OpenStudioLandscapes.engine.config.models import ConfigEngine
+from OpenStudioLandscapes.engine.env.configurable_resources.config_engine import ConfigEngineConfigurableResource
 from OpenStudioLandscapes.engine.constants import (
     ASSET_HEADER_BASE,
     ConfigParent,
@@ -307,6 +307,7 @@ def setup_json(
 )
 def compose(
     context: AssetExecutionContext,
+    config_ConfigEngineConfigurableResource: ConfigEngineConfigurableResource,
     CONFIG: config.models.Config,  # pylint: disable=redefined-outer-name
     compose_networks: Dict,  # pylint: disable=redefined-outer-name
     clone_repository: pathlib.Path,  # pylint: disable=redefined-outer-name
@@ -335,7 +336,7 @@ def compose(
 
     env: Dict = CONFIG.env
 
-    config_engine: ConfigEngine = CONFIG.config_engine
+    config_engine: ConfigEngineConfigurableResource = config_ConfigEngineConfigurableResource
 
     docker_compose_override: pathlib.Path = CONFIG.docker_compose_override_expanded
     context.log.debug(f"{docker_compose_override = }")
