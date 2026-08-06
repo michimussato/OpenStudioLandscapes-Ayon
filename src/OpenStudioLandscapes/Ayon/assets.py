@@ -35,7 +35,7 @@ from OpenStudioLandscapes.engine.common_assets import (  # compose,
     group_in,
     group_out,
 )
-from OpenStudioLandscapes.engine.config.models import ConfigEngine
+from OpenStudioLandscapes.engine.env.configurable_resources.config_engine import ConfigEngineConfigurableResource
 from OpenStudioLandscapes.engine.constants import (
     ASSET_HEADER_BASE,
     ConfigParent,
@@ -307,6 +307,7 @@ def setup_json(
 )
 def compose(
     context: AssetExecutionContext,
+    config_ConfigEngineConfigurableResource: ConfigEngineConfigurableResource,
     CONFIG: config.models.Config,  # pylint: disable=redefined-outer-name
     compose_networks: Dict,  # pylint: disable=redefined-outer-name
     clone_repository: pathlib.Path,  # pylint: disable=redefined-outer-name
@@ -334,8 +335,6 @@ def compose(
     """
 
     env: Dict = CONFIG.env
-
-    config_engine: ConfigEngine = CONFIG.config_engine
 
     docker_compose_override: pathlib.Path = CONFIG.docker_compose_override_expanded
     context.log.debug(f"{docker_compose_override = }")
@@ -409,7 +408,7 @@ def compose(
             {
                 "/etc/localtime:/etc/localtime:ro",
                 *_volume_relative,
-                *config_engine.global_bind_volumes,
+                *config_ConfigEngineConfigurableResource.global_bind_volumes,
                 *CONFIG.local_bind_volumes,
             }
         )
@@ -470,7 +469,7 @@ def compose(
             {
                 "/etc/localtime:/etc/localtime:ro",
                 *_volume_relative,
-                *config_engine.global_bind_volumes,
+                *config_ConfigEngineConfigurableResource.global_bind_volumes,
                 *CONFIG.local_bind_volumes,
             }
         )
@@ -481,7 +480,7 @@ def compose(
         context=context,
         service_name=service_name_postgres,
         landscape_id=env.get("LANDSCAPE", "default"),
-        domain_lan=config_engine.openstudiolandscapes__domain_lan,
+        domain_lan=config_ConfigEngineConfigurableResource.openstudiolandscapes__domain_lan,
     )
 
     service_name_redis = "redis"
@@ -489,7 +488,7 @@ def compose(
         context=context,
         service_name=service_name_redis,
         landscape_id=env.get("LANDSCAPE", "default"),
-        domain_lan=config_engine.openstudiolandscapes__domain_lan,
+        domain_lan=config_ConfigEngineConfigurableResource.openstudiolandscapes__domain_lan,
     )
 
     service_name_server = "server"
@@ -497,7 +496,7 @@ def compose(
         context=context,
         service_name=service_name_server,
         landscape_id=env.get("LANDSCAPE", "default"),
-        domain_lan=config_engine.openstudiolandscapes__domain_lan,
+        domain_lan=config_ConfigEngineConfigurableResource.openstudiolandscapes__domain_lan,
     )
 
     docker_dict_override = {
@@ -505,28 +504,28 @@ def compose(
             service_name_postgres: {
                 "container_name": container_name_postgres,
                 "hostname": host_name_postgres,
-                "domainname": config_engine.openstudiolandscapes__domain_lan,
+                "domainname": config_ConfigEngineConfigurableResource.openstudiolandscapes__domain_lan,
                 **copy.deepcopy(volumes_dict_postgres),
                 **copy.deepcopy(network_dict),
                 "environment": {
-                    "TZ": config_engine.tz,
-                    **config_engine.global_environment_variables,
+                    "TZ": config_ConfigEngineConfigurableResource.tz,
+                    **config_ConfigEngineConfigurableResource.global_environment_variables,
                 },
             },
             service_name_redis: {
                 "container_name": container_name_redis,
                 "hostname": host_name_redis,
-                "domainname": config_engine.openstudiolandscapes__domain_lan,
+                "domainname": config_ConfigEngineConfigurableResource.openstudiolandscapes__domain_lan,
                 **copy.deepcopy(network_dict),
                 "environment": {
-                    "TZ": config_engine.tz,
-                    **config_engine.global_environment_variables,
+                    "TZ": config_ConfigEngineConfigurableResource.tz,
+                    **config_ConfigEngineConfigurableResource.global_environment_variables,
                 },
             },
             service_name_server: {
                 "container_name": container_name_server,
                 "hostname": host_name_server,
-                "domainname": config_engine.openstudiolandscapes__domain_lan,
+                "domainname": config_ConfigEngineConfigurableResource.openstudiolandscapes__domain_lan,
                 # Todo:
                 #  - [ ] healthcheck failure: https://github.com/ynput/ayon-docker/issues/34
                 #  - [ ] Need to find out whether `ports` Override
@@ -538,8 +537,8 @@ def compose(
                 # AYON_STACK_SETTINGS_FILE ?= settings/template.json
                 # $(SETUP_CMD) - < $(AYON_STACK_SETTINGS_FILE)
                 "environment": {
-                    "TZ": config_engine.tz,
-                    **config_engine.global_environment_variables,
+                    "TZ": config_ConfigEngineConfigurableResource.tz,
+                    **config_ConfigEngineConfigurableResource.global_environment_variables,
                     **CONFIG.local_environment_variables,
                 },
                 **copy.deepcopy(network_dict),
