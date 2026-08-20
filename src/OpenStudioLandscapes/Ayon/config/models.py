@@ -5,11 +5,10 @@ from typing import Dict, List
 from OpenStudioLandscapes.engine.config.models import FeatureBaseModel
 from pydantic import (
     Field,
-    HttpUrl,
     PositiveInt,
 )
 
-from OpenStudioLandscapes.Ayon import (
+from OpenStudioLandscapes.Ayon.constants import (
     ASSET_HEADER,
     LOGGER,
     dist,
