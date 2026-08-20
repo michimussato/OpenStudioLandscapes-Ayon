@@ -4,7 +4,7 @@ from dagster import (
 )
 
 import OpenStudioLandscapes.Ayon.assets
-from OpenStudioLandscapes.Ayon import (
+from OpenStudioLandscapes.Ayon.constants import (
     LOGGER,
     dist,
 )
