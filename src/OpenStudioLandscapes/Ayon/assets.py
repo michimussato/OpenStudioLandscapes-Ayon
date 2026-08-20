@@ -50,11 +50,11 @@ from OpenStudioLandscapes.engine.utils import (
 )
 from OpenStudioLandscapes.engine.utils.docker.compose_dicts import get_network_dicts
 
-from OpenStudioLandscapes.Ayon import (
+from OpenStudioLandscapes.Ayon.constants import (
     ASSET_HEADER,
-    config,
     dist,
 )
+from OpenStudioLandscapes.Ayon.config import models
 
 # https://github.com/yaml/pyyaml/issues/722#issuecomment-1969292770
 yaml.SafeDumper.add_multi_representer(
@@ -70,8 +70,8 @@ cmd: AssetsDefinition = cmd.get_feature__cmd(
 
 CONFIG: AssetsDefinition = feature.get_feature__CONFIG(
     ASSET_HEADER=ASSET_HEADER,
-    CONFIG_STR=config.models.CONFIG_STR,
-    search_model_of_type=config.models.Config,
+    CONFIG_STR=models.CONFIG_STR,
+    search_model_of_type=models.Config,
 )
 
 
@@ -117,7 +117,7 @@ feature_in_parent: Union[AssetsDefinition, None] = group_in.get_feature_in_paren
 )
 def clone_repository(
     context: AssetExecutionContext,
-    CONFIG: config.models.Config,  # pylint: disable=redefined-outer-name
+    CONFIG: models.Config,  # pylint: disable=redefined-outer-name
 ) -> Generator[Output[pathlib.Path] | AssetMaterialization, None, None]:
 
     env: dict = CONFIG.env
@@ -165,7 +165,7 @@ def clone_repository(
 )
 def compose_networks(
     context: AssetExecutionContext,
-    CONFIG: config.models.Config,  # pylint: disable=redefined-outer-name
+    CONFIG: models.Config,  # pylint: disable=redefined-outer-name
 ) -> Generator[
     Output[Dict[str, Dict[str, Dict[str, str]]]] | AssetMaterialization,
     None,
@@ -215,7 +215,7 @@ def compose_networks(
 )
 def setup_json(
     context: AssetExecutionContext,
-    CONFIG: config.models.Config,  # pylint: disable=redefined-outer-name
+    CONFIG: models.Config,  # pylint: disable=redefined-outer-name
     feature_in: OpenStudioLandscapesFeatureIn,  # pylint: disable=redefined-outer-name
 ) -> Generator[Output[pathlib.Path] | AssetMaterialization | Any, None, None]:
 
@@ -307,7 +307,7 @@ def setup_json(
 )
 def compose(
     context: AssetExecutionContext,
-    CONFIG: config.models.Config,  # pylint: disable=redefined-outer-name
+    CONFIG: models.Config,  # pylint: disable=redefined-outer-name
     compose_networks: Dict,  # pylint: disable=redefined-outer-name
     clone_repository: pathlib.Path,  # pylint: disable=redefined-outer-name
     # setup_json: pathlib.Path,  # pylint: disable=redefined-outer-name
