@@ -210,9 +210,6 @@ repository_subdir:
   type: string
 repository_url:
   default: https://github.com/ynput/ayon-docker.git
-  format: uri
-  maxLength: 2083
-  minLength: 1
   title: Repository Url
   type: string
 setup_template:
@@ -352,4 +349,4 @@ To follow up on the previous LinkedIn publications, visit:
 
 ***
 
-Last changed: **2026-07-20 11:18:25 UTC**
+Last changed: **2026-09-07 08:29:06 UTC**
